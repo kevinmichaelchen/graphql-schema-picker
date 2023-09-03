@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+    restart: always
+    ports:
+    - "127.0.0.1:15432:5432"
+    volumes:
+    - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+
+  hasura:
+    image: hasura/graphql-engine:v2.33.1.cli-migrations-v3
+    ports:
+    - 127.0.0.1:8080:8080
+    depends_on:
+    - "postgres"
+    restart: always
+    volumes:
+      - ./schema:/var/schema
+    environment:
+      HASURA_GRAPHQL_MIGRATIONS_DIR: "/var/schema/migrations"
+      HASURA_GRAPHQL_METADATA_DIR: "/var/schema/metadata"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLED_APIS: metadata,graphql,config,metrics
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: naming_convention
+      HASURA_GRAPHQL_DEFAULT_NAMING_CONVENTION: graphql-default
+
+volumes:
+    pg_data:

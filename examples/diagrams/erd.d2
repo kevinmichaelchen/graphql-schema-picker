@@ -1,0 +1,65 @@
+direction: down
+
+airlines: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  name: text
+}
+
+manufacturers: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  name: text
+}
+
+aircrafts: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  model_number: text
+  serial_number: text
+  airline_id: uuid {constraint: foreign_key}
+  manufacturer_id: uuid {constraint: foreign_key}
+}
+
+aircrafts.airline_id -> airlines.id: owned by company
+aircrafts.manufacturer_id -> manufacturers.id: manufactured by company
+
+airports: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  name: text
+  code: text
+}
+
+flights: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  departing_airport_id: uuid {constraint: foreign_key}
+  arriving_airport_id: uuid {constraint: foreign_key}
+  airline_id: uuid {constraint: foreign_key}
+  aircraft_id: uuid {constraint: foreign_key}
+  expected_duration_mins: int
+  expected_departure_time: timestamp with time zone
+  expected_arrival_time: timestamp with time zone
+}
+
+flights.aircraft_id -> aircrafts: flown on aircraft
+flights.airline_id -> airlines: provided by airline
+flights.departing_airport_id -> airports: departure
+flights.arriving_airport_id -> airports: arrival
+
+employees: {
+  shape: sql_table
+  id: uuid {constraint: primary_key}
+  full_name: text
+}
+
+flight_staff {
+  shape: sql_table
+  flight_id: uuid {constraint: foreign_key}
+  employee_id: uuid {constraint: foreign_key}
+  role: text
+}
+
+flight_staff.flight_id -> flights.id: attended / flown by
+flight_staff.employee_id -> employees.id: was on flight
