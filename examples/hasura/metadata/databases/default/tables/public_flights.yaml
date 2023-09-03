@@ -1,3 +1,16 @@
 table:
   name: flights
   schema: public
+object_relationships:
+  - name: aircraft
+    using:
+      foreign_key_constraint_on: aircraft_id
+  - name: airline
+    using:
+      foreign_key_constraint_on: airline_id
+  - name: airport
+    using:
+      foreign_key_constraint_on: arriving_airport_id
+  - name: airportByDepartingAirportId
+    using:
+      foreign_key_constraint_on: departing_airport_id
