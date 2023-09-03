@@ -1,0 +1,8 @@
+- "!include public_aircrafts.yaml"
+- "!include public_airlines.yaml"
+- "!include public_airports.yaml"
+- "!include public_employees.yaml"
+- "!include public_flight_staff.yaml"
+- "!include public_flights.yaml"
+- "!include public_manufacturers.yaml"
+- "!include public_staff_roles.yaml"
