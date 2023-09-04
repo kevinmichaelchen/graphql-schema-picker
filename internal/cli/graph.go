@@ -1,16 +1,29 @@
 package cli
 
 import (
-	"errors"
 	"github.com/charmbracelet/log"
 	"github.com/dominikbraun/graph"
 	"github.com/graphql-go/graphql/language/ast"
 	"github.com/graphql-go/graphql/language/kinds"
+	"strings"
 )
 
 type Vertex struct {
 	Name string
 	Node ast.Node
+}
+
+type Describer interface {
+	GetDescription() *ast.StringValue
+}
+
+func sanitizeComment(d Describer) string {
+	desc := d.GetDescription()
+	if desc == nil {
+		return ""
+	}
+
+	return strings.ReplaceAll(desc.Value, `"`, `'`)
 }
 
 func NewVertex(node ast.Node) Vertex {
@@ -19,21 +32,70 @@ func NewVertex(node ast.Node) Vertex {
 	case kinds.ScalarDefinition:
 		obj := node.(*ast.ScalarDefinition)
 		name = obj.GetName().Value
+
+		// Sanitize description (e.g., remove double-quotes)
+		if obj.Description != nil {
+			obj.Description = &ast.StringValue{
+				Kind:  kinds.StringValue,
+				Value: sanitizeComment(obj),
+			}
+		}
 	case kinds.InterfaceDefinition:
 		obj := node.(*ast.InterfaceDefinition)
 		name = obj.GetName().Value
+
+		// Sanitize description (e.g., remove double-quotes)
+		if obj.Description != nil {
+			obj.Description = &ast.StringValue{
+				Kind:  kinds.StringValue,
+				Value: sanitizeComment(obj),
+			}
+		}
 	case kinds.UnionDefinition:
 		obj := node.(*ast.UnionDefinition)
 		name = obj.GetName().Value
+
+		// Sanitize description (e.g., remove double-quotes)
+		if obj.Description != nil {
+			obj.Description = &ast.StringValue{
+				Kind:  kinds.StringValue,
+				Value: sanitizeComment(obj),
+			}
+		}
 	case kinds.EnumDefinition:
 		obj := node.(*ast.EnumDefinition)
 		name = obj.GetName().Value
+
+		// Sanitize description (e.g., remove double-quotes)
+		if obj.Description != nil {
+			obj.Description = &ast.StringValue{
+				Kind:  kinds.StringValue,
+				Value: sanitizeComment(obj),
+			}
+		}
 	case kinds.InputObjectDefinition:
 		obj := node.(*ast.InputObjectDefinition)
 		name = obj.GetName().Value
+
+		// Sanitize description (e.g., remove double-quotes)
+		if obj.Description != nil {
+			obj.Description = &ast.StringValue{
+				Kind:  kinds.StringValue,
+				Value: sanitizeComment(obj),
+			}
+		}
+
 	case kinds.ObjectDefinition:
 		obj := node.(*ast.ObjectDefinition)
 		name = obj.GetName().Value
+
+		// Sanitize description (e.g., remove double-quotes)
+		if obj.Description != nil {
+			obj.Description = &ast.StringValue{
+				Kind:  kinds.StringValue,
+				Value: sanitizeComment(obj),
+			}
+		}
 	default:
 		panic("NewVertex: unsupported node kind: " + node.GetKind())
 	}
@@ -60,7 +122,7 @@ func buildPrunedGraph(doc *ast.Document) graph.Graph[string, Vertex] {
 	loadTopLevelDefinitions(g, doc)
 
 	// Build edges between vertices.
-	buildEdges(g, doc)
+	buildEdges(g)
 
 	// Prunes any vertices that don't appear in any edges
 	return prune(g)
@@ -82,53 +144,11 @@ func loadTopLevelDefinitions(g graph.Graph[string, Vertex], doc *ast.Document) {
 		case kinds.InputObjectDefinition:
 			v := NewVertex(d)
 			_ = g.AddVertex(v)
-			log.Debugf("Adding vertex for definition %d (%s) -- %s", i, d.GetKind(), v.Name)
+			log.Debugf("Adding vertex for definition %d (%s) -- %s",
+				i, d.GetKind(), v.Name)
 
 		default:
 			log.Warnf("Ignoring definition %d (%s)", i, d.GetKind())
-		}
-	}
-}
-
-func buildEdges(g graph.Graph[string, Vertex], doc *ast.Document) {
-	for _, desired := range desiredDefinitions {
-		v, err := g.Vertex(desired)
-		if err != nil {
-			if errors.Is(err, graph.ErrVertexNotFound) {
-				log.Errorf("unable to find definition for: %s", desired)
-			} else {
-				log.Fatal("unable to read vertex", "err", err)
-			}
-		}
-
-		switch v.Node.GetKind() {
-		// TODO support input objects, input values, interfaces, and unions... otherwise we're missing things like AircraftsBoolExp
-		case kinds.ObjectDefinition:
-			obj := v.Node.(*ast.ObjectDefinition)
-			fields := obj.Fields
-			// TODO iterate through node's fields
-			for _, f := range fields {
-
-				// Is the field a primitive scalar (e.g., Int, String)?
-				// If so, we can skip it, as it's natively a part of any
-				// GraphQL schema.
-				rootType := getRootTypeNameHelper(f.Type, 0)
-				if isBasicType(rootType) {
-					continue
-				}
-
-				log.Debug("Found field in object",
-					"object", obj.Name.Value,
-					"name", f.Name.Value,
-					"type", rootType,
-				)
-
-				_ = g.AddEdge(obj.Name.Value, rootType)
-
-				// TODO Fields also consist of their arguments, which themselves
-				// may be non-primitive dependencies.
-				//litter.Dump(f.Arguments)
-			}
 		}
 	}
 }

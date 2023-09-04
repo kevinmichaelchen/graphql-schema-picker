@@ -1,8 +1,14 @@
+"""
+Representation of a "Foo"
+"""
 type Foo {
   name: String
   bar: Bar
 }
 
+"""
+Representation of a "Bar
+"""
 type Bar {
   name: String
   quantity: Int!
