@@ -52,7 +52,7 @@ func VertexHash(v Vertex) string {
 //
 // This will provide constant-time access to a map of type names to their
 // definitions, as well as definitions to their dependencies (other types).
-func buildSchemaGraph(doc *ast.Document) graph.Graph[string, Vertex] {
+func buildPrunedGraph(doc *ast.Document) graph.Graph[string, Vertex] {
 	g := graph.New(VertexHash)
 
 	// Load the important definitions:
@@ -102,7 +102,7 @@ func buildEdges(g graph.Graph[string, Vertex], doc *ast.Document) {
 		}
 
 		switch v.Node.GetKind() {
-		// TODO support input objects, input values, interfaces, and unions
+		// TODO support input objects, input values, interfaces, and unions... otherwise we're missing things like AircraftsBoolExp
 		case kinds.ObjectDefinition:
 			obj := v.Node.(*ast.ObjectDefinition)
 			fields := obj.Fields

@@ -31,11 +31,15 @@ func fnPick(cmd *cobra.Command, args []string) {
 	// The most crucial step is to map out the AST.
 	// The AST object itself is clunky and nested.
 	// We need something flatter and more ergonomic: like a couple of maps!
-	g := buildSchemaGraph(astDoc)
+	g := buildPrunedGraph(astDoc)
 
 	// Build a visual diagram of the new SDL
 	file, _ := os.Create("./simple.gv")
 	_ = draw.DOT(g, file)
 
-	// TODO convert the GRAPH to an SDL
+	// Convert the GRAPH back to an SDL
+	newSDL := convertGraphToSDL(g)
+
+	// Print the new SDL to file
+	printSDL(newSDL)
 }
