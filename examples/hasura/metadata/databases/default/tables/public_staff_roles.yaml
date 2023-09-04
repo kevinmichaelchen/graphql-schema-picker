@@ -1,0 +1,12 @@
+table:
+  name: staff_roles
+  schema: public
+is_enum: true
+array_relationships:
+  - name: flightStaffs
+    using:
+      foreign_key_constraint_on:
+        column: role
+        table:
+          name: flight_staff
+          schema: public

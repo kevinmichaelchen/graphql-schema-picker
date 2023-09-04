@@ -1,0 +1,210 @@
+"""columns and relationships of "aircrafts"""
+type Aircrafts {
+  
+  """An object relationship"""
+  airline: Airlines!
+  airlineId: Uuid!
+  
+  """An array relationship"""
+  flights(
+    
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+    
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+  
+  """An aggregate relationship"""
+  flightsAggregate(
+    
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+    
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+  id: Uuid!
+  
+  """An object relationship"""
+  manufacturer: Manufacturers!
+  manufacturerId: Uuid!
+  modelNumber: String!
+  serialNumber: String!
+}
+
+"""columns and relationships of "airlines"""
+type Airlines {
+  
+  """An array relationship"""
+  aircrafts(
+    
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+    
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+  
+  """An aggregate relationship"""
+  aircraftsAggregate(
+    
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+    
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): AircraftsAggregate!
+  
+  """An array relationship"""
+  flights(
+    
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+    
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+  
+  """An aggregate relationship"""
+  flightsAggregate(
+    
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+    
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+  id: Uuid!
+  name: String!
+}
+
+scalar Uuid
+
+"""columns and relationships of "flights"""
+type Flights {
+  
+  """An object relationship"""
+  aircraft: Aircrafts!
+  aircraftId: Uuid!
+  
+  """An object relationship"""
+  airline: Airlines!
+  airlineId: Uuid!
+  
+  """An object relationship"""
+  airport: Airports!
+  
+  """An object relationship"""
+  airportByDepartingAirportId: Airports!
+  arrivingAirportId: Uuid!
+  departingAirportId: Uuid!
+  expectedArrivalTime: Timestamptz!
+  expectedDepartureTime: Timestamptz!
+  expectedDurationMins: Int!
+  id: Uuid!
+}
+
+"""aggregated selection of "flights"""
+type FlightsAggregate {
+  aggregate: FlightsAggregateFields
+  nodes: [Flights!]!
+}
+
+"""columns and relationships of "manufacturers"""
+type Manufacturers {
+  
+  """An array relationship"""
+  aircrafts(
+    
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+    
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+  
+  """An aggregate relationship"""
+  aircraftsAggregate(
+    
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+    
+    """limit the number of rows returned"""
+    limit: Int
+    
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+    
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): AircraftsAggregate!
+  id: Uuid!
+  name: String!
+}

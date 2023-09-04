@@ -1,0 +1,3485 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+columns and relationships of "aircrafts"
+"""
+type Aircrafts {
+  """An object relationship"""
+  airline: Airlines!
+  airlineId: Uuid!
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """An aggregate relationship"""
+  flightsAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+  id: Uuid!
+
+  """An object relationship"""
+  manufacturer: Manufacturers!
+  manufacturerId: Uuid!
+  modelNumber: String!
+  serialNumber: String!
+}
+
+"""
+aggregated selection of "aircrafts"
+"""
+type AircraftsAggregate {
+  aggregate: AircraftsAggregateFields
+  nodes: [Aircrafts!]!
+}
+
+input AircraftsAggregateBoolExp {
+  count: aircraftsAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "aircrafts"
+"""
+type AircraftsAggregateFields {
+  count(columns: [AircraftsSelectColumn!], distinct: Boolean): Int!
+  max: AircraftsMaxFields
+  min: AircraftsMinFields
+}
+
+"""
+order by aggregate values of table "aircrafts"
+"""
+input AircraftsAggregateOrderBy {
+  count: OrderBy
+  max: AircraftsMaxOrderBy
+  min: AircraftsMinOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "aircrafts"
+"""
+input AircraftsArrRelInsertInput {
+  data: [AircraftsInsertInput!]!
+
+  """upsert condition"""
+  onConflict: AircraftsOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "aircrafts". All fields are combined with a logical 'AND'.
+"""
+input AircraftsBoolExp {
+  _and: [AircraftsBoolExp!]
+  _not: AircraftsBoolExp
+  _or: [AircraftsBoolExp!]
+  airline: AirlinesBoolExp
+  airlineId: UuidComparisonExp
+  flights: FlightsBoolExp
+  flightsAggregate: FlightsAggregateBoolExp
+  id: UuidComparisonExp
+  manufacturer: ManufacturersBoolExp
+  manufacturerId: UuidComparisonExp
+  modelNumber: StringComparisonExp
+  serialNumber: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "aircrafts"
+"""
+enum AircraftsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  aircraftsPkey
+}
+
+"""
+input type for inserting data into table "aircrafts"
+"""
+input AircraftsInsertInput {
+  airline: AirlinesObjRelInsertInput
+  airlineId: Uuid
+  flights: FlightsArrRelInsertInput
+  id: Uuid
+  manufacturer: ManufacturersObjRelInsertInput
+  manufacturerId: Uuid
+  modelNumber: String
+  serialNumber: String
+}
+
+"""aggregate max on columns"""
+type AircraftsMaxFields {
+  airlineId: Uuid
+  id: Uuid
+  manufacturerId: Uuid
+  modelNumber: String
+  serialNumber: String
+}
+
+"""
+order by max() on columns of table "aircrafts"
+"""
+input AircraftsMaxOrderBy {
+  airlineId: OrderBy
+  id: OrderBy
+  manufacturerId: OrderBy
+  modelNumber: OrderBy
+  serialNumber: OrderBy
+}
+
+"""aggregate min on columns"""
+type AircraftsMinFields {
+  airlineId: Uuid
+  id: Uuid
+  manufacturerId: Uuid
+  modelNumber: String
+  serialNumber: String
+}
+
+"""
+order by min() on columns of table "aircrafts"
+"""
+input AircraftsMinOrderBy {
+  airlineId: OrderBy
+  id: OrderBy
+  manufacturerId: OrderBy
+  modelNumber: OrderBy
+  serialNumber: OrderBy
+}
+
+"""
+response of any mutation on the table "aircrafts"
+"""
+type AircraftsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Aircrafts!]!
+}
+
+"""
+input type for inserting object relation for remote table "aircrafts"
+"""
+input AircraftsObjRelInsertInput {
+  data: AircraftsInsertInput!
+
+  """upsert condition"""
+  onConflict: AircraftsOnConflict
+}
+
+"""
+on_conflict condition type for table "aircrafts"
+"""
+input AircraftsOnConflict {
+  constraint: AircraftsConstraint!
+  updateColumns: [AircraftsUpdateColumn!]! = []
+  where: AircraftsBoolExp
+}
+
+"""Ordering options when selecting data from "aircrafts"."""
+input AircraftsOrderBy {
+  airline: AirlinesOrderBy
+  airlineId: OrderBy
+  flightsAggregate: FlightsAggregateOrderBy
+  id: OrderBy
+  manufacturer: ManufacturersOrderBy
+  manufacturerId: OrderBy
+  modelNumber: OrderBy
+  serialNumber: OrderBy
+}
+
+"""primary key columns input for table: aircrafts"""
+input AircraftsPkColumnsInput {
+  id: Uuid!
+}
+
+"""
+select columns of table "aircrafts"
+"""
+enum AircraftsSelectColumn {
+  """column name"""
+  airlineId
+
+  """column name"""
+  id
+
+  """column name"""
+  manufacturerId
+
+  """column name"""
+  modelNumber
+
+  """column name"""
+  serialNumber
+}
+
+"""
+input type for updating data in table "aircrafts"
+"""
+input AircraftsSetInput {
+  airlineId: Uuid
+  id: Uuid
+  manufacturerId: Uuid
+  modelNumber: String
+  serialNumber: String
+}
+
+"""
+Streaming cursor of the table "aircrafts"
+"""
+input AircraftsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: AircraftsStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input AircraftsStreamCursorValueInput {
+  airlineId: Uuid
+  id: Uuid
+  manufacturerId: Uuid
+  modelNumber: String
+  serialNumber: String
+}
+
+"""
+update columns of table "aircrafts"
+"""
+enum AircraftsUpdateColumn {
+  """column name"""
+  airlineId
+
+  """column name"""
+  id
+
+  """column name"""
+  manufacturerId
+
+  """column name"""
+  modelNumber
+
+  """column name"""
+  serialNumber
+}
+
+input AircraftsUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: AircraftsSetInput
+
+  """filter the rows which have to be updated"""
+  where: AircraftsBoolExp!
+}
+
+"""
+columns and relationships of "airlines"
+"""
+type Airlines {
+  """An array relationship"""
+  aircrafts(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+
+  """An aggregate relationship"""
+  aircraftsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): AircraftsAggregate!
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """An aggregate relationship"""
+  flightsAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+  id: Uuid!
+  name: String!
+}
+
+"""
+aggregated selection of "airlines"
+"""
+type AirlinesAggregate {
+  aggregate: AirlinesAggregateFields
+  nodes: [Airlines!]!
+}
+
+"""
+aggregate fields of "airlines"
+"""
+type AirlinesAggregateFields {
+  count(columns: [AirlinesSelectColumn!], distinct: Boolean): Int!
+  max: AirlinesMaxFields
+  min: AirlinesMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "airlines". All fields are combined with a logical 'AND'.
+"""
+input AirlinesBoolExp {
+  _and: [AirlinesBoolExp!]
+  _not: AirlinesBoolExp
+  _or: [AirlinesBoolExp!]
+  aircrafts: AircraftsBoolExp
+  aircraftsAggregate: AircraftsAggregateBoolExp
+  flights: FlightsBoolExp
+  flightsAggregate: FlightsAggregateBoolExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "airlines"
+"""
+enum AirlinesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  airlinesPkey
+}
+
+"""
+input type for inserting data into table "airlines"
+"""
+input AirlinesInsertInput {
+  aircrafts: AircraftsArrRelInsertInput
+  flights: FlightsArrRelInsertInput
+  id: Uuid
+  name: String
+}
+
+"""aggregate max on columns"""
+type AirlinesMaxFields {
+  id: Uuid
+  name: String
+}
+
+"""aggregate min on columns"""
+type AirlinesMinFields {
+  id: Uuid
+  name: String
+}
+
+"""
+response of any mutation on the table "airlines"
+"""
+type AirlinesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Airlines!]!
+}
+
+"""
+input type for inserting object relation for remote table "airlines"
+"""
+input AirlinesObjRelInsertInput {
+  data: AirlinesInsertInput!
+
+  """upsert condition"""
+  onConflict: AirlinesOnConflict
+}
+
+"""
+on_conflict condition type for table "airlines"
+"""
+input AirlinesOnConflict {
+  constraint: AirlinesConstraint!
+  updateColumns: [AirlinesUpdateColumn!]! = []
+  where: AirlinesBoolExp
+}
+
+"""Ordering options when selecting data from "airlines"."""
+input AirlinesOrderBy {
+  aircraftsAggregate: AircraftsAggregateOrderBy
+  flightsAggregate: FlightsAggregateOrderBy
+  id: OrderBy
+  name: OrderBy
+}
+
+"""primary key columns input for table: airlines"""
+input AirlinesPkColumnsInput {
+  id: Uuid!
+}
+
+"""
+select columns of table "airlines"
+"""
+enum AirlinesSelectColumn {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "airlines"
+"""
+input AirlinesSetInput {
+  id: Uuid
+  name: String
+}
+
+"""
+Streaming cursor of the table "airlines"
+"""
+input AirlinesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: AirlinesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input AirlinesStreamCursorValueInput {
+  id: Uuid
+  name: String
+}
+
+"""
+update columns of table "airlines"
+"""
+enum AirlinesUpdateColumn {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+input AirlinesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: AirlinesSetInput
+
+  """filter the rows which have to be updated"""
+  where: AirlinesBoolExp!
+}
+
+"""
+columns and relationships of "airports"
+"""
+type Airports {
+  code: String!
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """An aggregate relationship"""
+  flightsAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+
+  """An array relationship"""
+  flightsByDepartingAirportId(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """An aggregate relationship"""
+  flightsByDepartingAirportIdAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+  id: Uuid!
+  name: String!
+}
+
+"""
+aggregated selection of "airports"
+"""
+type AirportsAggregate {
+  aggregate: AirportsAggregateFields
+  nodes: [Airports!]!
+}
+
+"""
+aggregate fields of "airports"
+"""
+type AirportsAggregateFields {
+  count(columns: [AirportsSelectColumn!], distinct: Boolean): Int!
+  max: AirportsMaxFields
+  min: AirportsMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "airports". All fields are combined with a logical 'AND'.
+"""
+input AirportsBoolExp {
+  _and: [AirportsBoolExp!]
+  _not: AirportsBoolExp
+  _or: [AirportsBoolExp!]
+  code: StringComparisonExp
+  flights: FlightsBoolExp
+  flightsAggregate: FlightsAggregateBoolExp
+  flightsByDepartingAirportId: FlightsBoolExp
+  flightsByDepartingAirportIdAggregate: FlightsAggregateBoolExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "airports"
+"""
+enum AirportsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  airportsPkey
+}
+
+"""
+input type for inserting data into table "airports"
+"""
+input AirportsInsertInput {
+  code: String
+  flights: FlightsArrRelInsertInput
+  flightsByDepartingAirportId: FlightsArrRelInsertInput
+  id: Uuid
+  name: String
+}
+
+"""aggregate max on columns"""
+type AirportsMaxFields {
+  code: String
+  id: Uuid
+  name: String
+}
+
+"""aggregate min on columns"""
+type AirportsMinFields {
+  code: String
+  id: Uuid
+  name: String
+}
+
+"""
+response of any mutation on the table "airports"
+"""
+type AirportsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Airports!]!
+}
+
+"""
+input type for inserting object relation for remote table "airports"
+"""
+input AirportsObjRelInsertInput {
+  data: AirportsInsertInput!
+
+  """upsert condition"""
+  onConflict: AirportsOnConflict
+}
+
+"""
+on_conflict condition type for table "airports"
+"""
+input AirportsOnConflict {
+  constraint: AirportsConstraint!
+  updateColumns: [AirportsUpdateColumn!]! = []
+  where: AirportsBoolExp
+}
+
+"""Ordering options when selecting data from "airports"."""
+input AirportsOrderBy {
+  code: OrderBy
+  flightsAggregate: FlightsAggregateOrderBy
+  flightsByDepartingAirportIdAggregate: FlightsAggregateOrderBy
+  id: OrderBy
+  name: OrderBy
+}
+
+"""primary key columns input for table: airports"""
+input AirportsPkColumnsInput {
+  id: Uuid!
+}
+
+"""
+select columns of table "airports"
+"""
+enum AirportsSelectColumn {
+  """column name"""
+  code
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "airports"
+"""
+input AirportsSetInput {
+  code: String
+  id: Uuid
+  name: String
+}
+
+"""
+Streaming cursor of the table "airports"
+"""
+input AirportsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: AirportsStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input AirportsStreamCursorValueInput {
+  code: String
+  id: Uuid
+  name: String
+}
+
+"""
+update columns of table "airports"
+"""
+enum AirportsUpdateColumn {
+  """column name"""
+  code
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+input AirportsUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: AirportsSetInput
+
+  """filter the rows which have to be updated"""
+  where: AirportsBoolExp!
+}
+
+"""ordering argument of a cursor"""
+enum CursorOrdering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+"""
+columns and relationships of "employees"
+"""
+type Employees {
+  fullName: String!
+  id: Uuid!
+}
+
+"""
+aggregated selection of "employees"
+"""
+type EmployeesAggregate {
+  aggregate: EmployeesAggregateFields
+  nodes: [Employees!]!
+}
+
+"""
+aggregate fields of "employees"
+"""
+type EmployeesAggregateFields {
+  count(columns: [EmployeesSelectColumn!], distinct: Boolean): Int!
+  max: EmployeesMaxFields
+  min: EmployeesMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "employees". All fields are combined with a logical 'AND'.
+"""
+input EmployeesBoolExp {
+  _and: [EmployeesBoolExp!]
+  _not: EmployeesBoolExp
+  _or: [EmployeesBoolExp!]
+  fullName: StringComparisonExp
+  id: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "employees"
+"""
+enum EmployeesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  employeesPkey
+}
+
+"""
+input type for inserting data into table "employees"
+"""
+input EmployeesInsertInput {
+  fullName: String
+  id: Uuid
+}
+
+"""aggregate max on columns"""
+type EmployeesMaxFields {
+  fullName: String
+  id: Uuid
+}
+
+"""aggregate min on columns"""
+type EmployeesMinFields {
+  fullName: String
+  id: Uuid
+}
+
+"""
+response of any mutation on the table "employees"
+"""
+type EmployeesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Employees!]!
+}
+
+"""
+on_conflict condition type for table "employees"
+"""
+input EmployeesOnConflict {
+  constraint: EmployeesConstraint!
+  updateColumns: [EmployeesUpdateColumn!]! = []
+  where: EmployeesBoolExp
+}
+
+"""Ordering options when selecting data from "employees"."""
+input EmployeesOrderBy {
+  fullName: OrderBy
+  id: OrderBy
+}
+
+"""primary key columns input for table: employees"""
+input EmployeesPkColumnsInput {
+  id: Uuid!
+}
+
+"""
+select columns of table "employees"
+"""
+enum EmployeesSelectColumn {
+  """column name"""
+  fullName
+
+  """column name"""
+  id
+}
+
+"""
+input type for updating data in table "employees"
+"""
+input EmployeesSetInput {
+  fullName: String
+  id: Uuid
+}
+
+"""
+Streaming cursor of the table "employees"
+"""
+input EmployeesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: EmployeesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input EmployeesStreamCursorValueInput {
+  fullName: String
+  id: Uuid
+}
+
+"""
+update columns of table "employees"
+"""
+enum EmployeesUpdateColumn {
+  """column name"""
+  fullName
+
+  """column name"""
+  id
+}
+
+input EmployeesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: EmployeesSetInput
+
+  """filter the rows which have to be updated"""
+  where: EmployeesBoolExp!
+}
+
+"""
+columns and relationships of "flight_staff"
+"""
+type FlightStaff {
+  employeeId: Uuid!
+  flightId: Uuid!
+  role: StaffRolesEnum!
+
+  """An object relationship"""
+  staffRole: StaffRoles!
+}
+
+"""
+aggregated selection of "flight_staff"
+"""
+type FlightStaffAggregate {
+  aggregate: FlightStaffAggregateFields
+  nodes: [FlightStaff!]!
+}
+
+input FlightStaffAggregateBoolExp {
+  count: flightStaffAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "flight_staff"
+"""
+type FlightStaffAggregateFields {
+  count(columns: [FlightStaffSelectColumn!], distinct: Boolean): Int!
+  max: FlightStaffMaxFields
+  min: FlightStaffMinFields
+}
+
+"""
+order by aggregate values of table "flight_staff"
+"""
+input FlightStaffAggregateOrderBy {
+  count: OrderBy
+  max: FlightStaffMaxOrderBy
+  min: FlightStaffMinOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "flight_staff"
+"""
+input FlightStaffArrRelInsertInput {
+  data: [FlightStaffInsertInput!]!
+
+  """upsert condition"""
+  onConflict: FlightStaffOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "flight_staff". All fields are combined with a logical 'AND'.
+"""
+input FlightStaffBoolExp {
+  _and: [FlightStaffBoolExp!]
+  _not: FlightStaffBoolExp
+  _or: [FlightStaffBoolExp!]
+  employeeId: UuidComparisonExp
+  flightId: UuidComparisonExp
+  role: StaffRolesEnumComparisonExp
+  staffRole: StaffRolesBoolExp
+}
+
+"""
+unique or primary key constraints on table "flight_staff"
+"""
+enum FlightStaffConstraint {
+  """
+  unique or primary key constraint on columns "employee_id", "flight_id"
+  """
+  flightStaffPkey
+}
+
+"""
+input type for inserting data into table "flight_staff"
+"""
+input FlightStaffInsertInput {
+  employeeId: Uuid
+  flightId: Uuid
+  role: StaffRolesEnum
+  staffRole: StaffRolesObjRelInsertInput
+}
+
+"""aggregate max on columns"""
+type FlightStaffMaxFields {
+  employeeId: Uuid
+  flightId: Uuid
+}
+
+"""
+order by max() on columns of table "flight_staff"
+"""
+input FlightStaffMaxOrderBy {
+  employeeId: OrderBy
+  flightId: OrderBy
+}
+
+"""aggregate min on columns"""
+type FlightStaffMinFields {
+  employeeId: Uuid
+  flightId: Uuid
+}
+
+"""
+order by min() on columns of table "flight_staff"
+"""
+input FlightStaffMinOrderBy {
+  employeeId: OrderBy
+  flightId: OrderBy
+}
+
+"""
+response of any mutation on the table "flight_staff"
+"""
+type FlightStaffMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [FlightStaff!]!
+}
+
+"""
+on_conflict condition type for table "flight_staff"
+"""
+input FlightStaffOnConflict {
+  constraint: FlightStaffConstraint!
+  updateColumns: [FlightStaffUpdateColumn!]! = []
+  where: FlightStaffBoolExp
+}
+
+"""Ordering options when selecting data from "flight_staff"."""
+input FlightStaffOrderBy {
+  employeeId: OrderBy
+  flightId: OrderBy
+  role: OrderBy
+  staffRole: StaffRolesOrderBy
+}
+
+"""primary key columns input for table: flight_staff"""
+input FlightStaffPkColumnsInput {
+  employeeId: Uuid!
+  flightId: Uuid!
+}
+
+"""
+select columns of table "flight_staff"
+"""
+enum FlightStaffSelectColumn {
+  """column name"""
+  employeeId
+
+  """column name"""
+  flightId
+
+  """column name"""
+  role
+}
+
+"""
+input type for updating data in table "flight_staff"
+"""
+input FlightStaffSetInput {
+  employeeId: Uuid
+  flightId: Uuid
+  role: StaffRolesEnum
+}
+
+"""
+Streaming cursor of the table "flight_staff"
+"""
+input FlightStaffStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: FlightStaffStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input FlightStaffStreamCursorValueInput {
+  employeeId: Uuid
+  flightId: Uuid
+  role: StaffRolesEnum
+}
+
+"""
+update columns of table "flight_staff"
+"""
+enum FlightStaffUpdateColumn {
+  """column name"""
+  employeeId
+
+  """column name"""
+  flightId
+
+  """column name"""
+  role
+}
+
+input FlightStaffUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: FlightStaffSetInput
+
+  """filter the rows which have to be updated"""
+  where: FlightStaffBoolExp!
+}
+
+"""
+columns and relationships of "flights"
+"""
+type Flights {
+  """An object relationship"""
+  aircraft: Aircrafts!
+  aircraftId: Uuid!
+
+  """An object relationship"""
+  airline: Airlines!
+  airlineId: Uuid!
+
+  """An object relationship"""
+  airport: Airports!
+
+  """An object relationship"""
+  airportByDepartingAirportId: Airports!
+  arrivingAirportId: Uuid!
+  departingAirportId: Uuid!
+  expectedArrivalTime: Timestamptz!
+  expectedDepartureTime: Timestamptz!
+  expectedDurationMins: Int!
+  id: Uuid!
+}
+
+"""
+aggregated selection of "flights"
+"""
+type FlightsAggregate {
+  aggregate: FlightsAggregateFields
+  nodes: [Flights!]!
+}
+
+input FlightsAggregateBoolExp {
+  count: flightsAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "flights"
+"""
+type FlightsAggregateFields {
+  avg: FlightsAvgFields
+  count(columns: [FlightsSelectColumn!], distinct: Boolean): Int!
+  max: FlightsMaxFields
+  min: FlightsMinFields
+  stddev: FlightsStddevFields
+  stddevPop: FlightsStddevPopFields
+  stddevSamp: FlightsStddevSampFields
+  sum: FlightsSumFields
+  varPop: FlightsVarPopFields
+  varSamp: FlightsVarSampFields
+  variance: FlightsVarianceFields
+}
+
+"""
+order by aggregate values of table "flights"
+"""
+input FlightsAggregateOrderBy {
+  avg: FlightsAvgOrderBy
+  count: OrderBy
+  max: FlightsMaxOrderBy
+  min: FlightsMinOrderBy
+  stddev: FlightsStddevOrderBy
+  stddevPop: FlightsStddevPopOrderBy
+  stddevSamp: FlightsStddevSampOrderBy
+  sum: FlightsSumOrderBy
+  varPop: FlightsVarPopOrderBy
+  varSamp: FlightsVarSampOrderBy
+  variance: FlightsVarianceOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "flights"
+"""
+input FlightsArrRelInsertInput {
+  data: [FlightsInsertInput!]!
+
+  """upsert condition"""
+  onConflict: FlightsOnConflict
+}
+
+"""aggregate avg on columns"""
+type FlightsAvgFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by avg() on columns of table "flights"
+"""
+input FlightsAvgOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""
+Boolean expression to filter rows from the table "flights". All fields are combined with a logical 'AND'.
+"""
+input FlightsBoolExp {
+  _and: [FlightsBoolExp!]
+  _not: FlightsBoolExp
+  _or: [FlightsBoolExp!]
+  aircraft: AircraftsBoolExp
+  aircraftId: UuidComparisonExp
+  airline: AirlinesBoolExp
+  airlineId: UuidComparisonExp
+  airport: AirportsBoolExp
+  airportByDepartingAirportId: AirportsBoolExp
+  arrivingAirportId: UuidComparisonExp
+  departingAirportId: UuidComparisonExp
+  expectedArrivalTime: TimestamptzComparisonExp
+  expectedDepartureTime: TimestamptzComparisonExp
+  expectedDurationMins: IntComparisonExp
+  id: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "flights"
+"""
+enum FlightsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  flightsPkey
+}
+
+"""
+input type for incrementing numeric columns in table "flights"
+"""
+input FlightsIncInput {
+  expectedDurationMins: Int
+}
+
+"""
+input type for inserting data into table "flights"
+"""
+input FlightsInsertInput {
+  aircraft: AircraftsObjRelInsertInput
+  aircraftId: Uuid
+  airline: AirlinesObjRelInsertInput
+  airlineId: Uuid
+  airport: AirportsObjRelInsertInput
+  airportByDepartingAirportId: AirportsObjRelInsertInput
+  arrivingAirportId: Uuid
+  departingAirportId: Uuid
+  expectedArrivalTime: Timestamptz
+  expectedDepartureTime: Timestamptz
+  expectedDurationMins: Int
+  id: Uuid
+}
+
+"""aggregate max on columns"""
+type FlightsMaxFields {
+  aircraftId: Uuid
+  airlineId: Uuid
+  arrivingAirportId: Uuid
+  departingAirportId: Uuid
+  expectedArrivalTime: Timestamptz
+  expectedDepartureTime: Timestamptz
+  expectedDurationMins: Int
+  id: Uuid
+}
+
+"""
+order by max() on columns of table "flights"
+"""
+input FlightsMaxOrderBy {
+  aircraftId: OrderBy
+  airlineId: OrderBy
+  arrivingAirportId: OrderBy
+  departingAirportId: OrderBy
+  expectedArrivalTime: OrderBy
+  expectedDepartureTime: OrderBy
+  expectedDurationMins: OrderBy
+  id: OrderBy
+}
+
+"""aggregate min on columns"""
+type FlightsMinFields {
+  aircraftId: Uuid
+  airlineId: Uuid
+  arrivingAirportId: Uuid
+  departingAirportId: Uuid
+  expectedArrivalTime: Timestamptz
+  expectedDepartureTime: Timestamptz
+  expectedDurationMins: Int
+  id: Uuid
+}
+
+"""
+order by min() on columns of table "flights"
+"""
+input FlightsMinOrderBy {
+  aircraftId: OrderBy
+  airlineId: OrderBy
+  arrivingAirportId: OrderBy
+  departingAirportId: OrderBy
+  expectedArrivalTime: OrderBy
+  expectedDepartureTime: OrderBy
+  expectedDurationMins: OrderBy
+  id: OrderBy
+}
+
+"""
+response of any mutation on the table "flights"
+"""
+type FlightsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Flights!]!
+}
+
+"""
+on_conflict condition type for table "flights"
+"""
+input FlightsOnConflict {
+  constraint: FlightsConstraint!
+  updateColumns: [FlightsUpdateColumn!]! = []
+  where: FlightsBoolExp
+}
+
+"""Ordering options when selecting data from "flights"."""
+input FlightsOrderBy {
+  aircraft: AircraftsOrderBy
+  aircraftId: OrderBy
+  airline: AirlinesOrderBy
+  airlineId: OrderBy
+  airport: AirportsOrderBy
+  airportByDepartingAirportId: AirportsOrderBy
+  arrivingAirportId: OrderBy
+  departingAirportId: OrderBy
+  expectedArrivalTime: OrderBy
+  expectedDepartureTime: OrderBy
+  expectedDurationMins: OrderBy
+  id: OrderBy
+}
+
+"""primary key columns input for table: flights"""
+input FlightsPkColumnsInput {
+  id: Uuid!
+}
+
+"""
+select columns of table "flights"
+"""
+enum FlightsSelectColumn {
+  """column name"""
+  aircraftId
+
+  """column name"""
+  airlineId
+
+  """column name"""
+  arrivingAirportId
+
+  """column name"""
+  departingAirportId
+
+  """column name"""
+  expectedArrivalTime
+
+  """column name"""
+  expectedDepartureTime
+
+  """column name"""
+  expectedDurationMins
+
+  """column name"""
+  id
+}
+
+"""
+input type for updating data in table "flights"
+"""
+input FlightsSetInput {
+  aircraftId: Uuid
+  airlineId: Uuid
+  arrivingAirportId: Uuid
+  departingAirportId: Uuid
+  expectedArrivalTime: Timestamptz
+  expectedDepartureTime: Timestamptz
+  expectedDurationMins: Int
+  id: Uuid
+}
+
+"""aggregate stddev on columns"""
+type FlightsStddevFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by stddev() on columns of table "flights"
+"""
+input FlightsStddevOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""aggregate stddevPop on columns"""
+type FlightsStddevPopFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by stddevPop() on columns of table "flights"
+"""
+input FlightsStddevPopOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""aggregate stddevSamp on columns"""
+type FlightsStddevSampFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by stddevSamp() on columns of table "flights"
+"""
+input FlightsStddevSampOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""
+Streaming cursor of the table "flights"
+"""
+input FlightsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: FlightsStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input FlightsStreamCursorValueInput {
+  aircraftId: Uuid
+  airlineId: Uuid
+  arrivingAirportId: Uuid
+  departingAirportId: Uuid
+  expectedArrivalTime: Timestamptz
+  expectedDepartureTime: Timestamptz
+  expectedDurationMins: Int
+  id: Uuid
+}
+
+"""aggregate sum on columns"""
+type FlightsSumFields {
+  expectedDurationMins: Int
+}
+
+"""
+order by sum() on columns of table "flights"
+"""
+input FlightsSumOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""
+update columns of table "flights"
+"""
+enum FlightsUpdateColumn {
+  """column name"""
+  aircraftId
+
+  """column name"""
+  airlineId
+
+  """column name"""
+  arrivingAirportId
+
+  """column name"""
+  departingAirportId
+
+  """column name"""
+  expectedArrivalTime
+
+  """column name"""
+  expectedDepartureTime
+
+  """column name"""
+  expectedDurationMins
+
+  """column name"""
+  id
+}
+
+input FlightsUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: FlightsIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: FlightsSetInput
+
+  """filter the rows which have to be updated"""
+  where: FlightsBoolExp!
+}
+
+"""aggregate varPop on columns"""
+type FlightsVarPopFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by varPop() on columns of table "flights"
+"""
+input FlightsVarPopOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""aggregate varSamp on columns"""
+type FlightsVarSampFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by varSamp() on columns of table "flights"
+"""
+input FlightsVarSampOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""aggregate variance on columns"""
+type FlightsVarianceFields {
+  expectedDurationMins: Float
+}
+
+"""
+order by variance() on columns of table "flights"
+"""
+input FlightsVarianceOrderBy {
+  expectedDurationMins: OrderBy
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input IntComparisonExp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _isNull: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "manufacturers"
+"""
+type Manufacturers {
+  """An array relationship"""
+  aircrafts(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+
+  """An aggregate relationship"""
+  aircraftsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): AircraftsAggregate!
+  id: Uuid!
+  name: String!
+}
+
+"""
+aggregated selection of "manufacturers"
+"""
+type ManufacturersAggregate {
+  aggregate: ManufacturersAggregateFields
+  nodes: [Manufacturers!]!
+}
+
+"""
+aggregate fields of "manufacturers"
+"""
+type ManufacturersAggregateFields {
+  count(columns: [ManufacturersSelectColumn!], distinct: Boolean): Int!
+  max: ManufacturersMaxFields
+  min: ManufacturersMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "manufacturers". All fields are combined with a logical 'AND'.
+"""
+input ManufacturersBoolExp {
+  _and: [ManufacturersBoolExp!]
+  _not: ManufacturersBoolExp
+  _or: [ManufacturersBoolExp!]
+  aircrafts: AircraftsBoolExp
+  aircraftsAggregate: AircraftsAggregateBoolExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "manufacturers"
+"""
+enum ManufacturersConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  manufacturersPkey
+}
+
+"""
+input type for inserting data into table "manufacturers"
+"""
+input ManufacturersInsertInput {
+  aircrafts: AircraftsArrRelInsertInput
+  id: Uuid
+  name: String
+}
+
+"""aggregate max on columns"""
+type ManufacturersMaxFields {
+  id: Uuid
+  name: String
+}
+
+"""aggregate min on columns"""
+type ManufacturersMinFields {
+  id: Uuid
+  name: String
+}
+
+"""
+response of any mutation on the table "manufacturers"
+"""
+type ManufacturersMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Manufacturers!]!
+}
+
+"""
+input type for inserting object relation for remote table "manufacturers"
+"""
+input ManufacturersObjRelInsertInput {
+  data: ManufacturersInsertInput!
+
+  """upsert condition"""
+  onConflict: ManufacturersOnConflict
+}
+
+"""
+on_conflict condition type for table "manufacturers"
+"""
+input ManufacturersOnConflict {
+  constraint: ManufacturersConstraint!
+  updateColumns: [ManufacturersUpdateColumn!]! = []
+  where: ManufacturersBoolExp
+}
+
+"""Ordering options when selecting data from "manufacturers"."""
+input ManufacturersOrderBy {
+  aircraftsAggregate: AircraftsAggregateOrderBy
+  id: OrderBy
+  name: OrderBy
+}
+
+"""primary key columns input for table: manufacturers"""
+input ManufacturersPkColumnsInput {
+  id: Uuid!
+}
+
+"""
+select columns of table "manufacturers"
+"""
+enum ManufacturersSelectColumn {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "manufacturers"
+"""
+input ManufacturersSetInput {
+  id: Uuid
+  name: String
+}
+
+"""
+Streaming cursor of the table "manufacturers"
+"""
+input ManufacturersStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: ManufacturersStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ManufacturersStreamCursorValueInput {
+  id: Uuid
+  name: String
+}
+
+"""
+update columns of table "manufacturers"
+"""
+enum ManufacturersUpdateColumn {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+input ManufacturersUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: ManufacturersSetInput
+
+  """filter the rows which have to be updated"""
+  where: ManufacturersBoolExp!
+}
+
+"""column ordering options"""
+enum OrderBy {
+  """in ascending order, nulls last"""
+  ASC
+
+  """in ascending order, nulls first"""
+  ASC_NULLS_FIRST
+
+  """in ascending order, nulls last"""
+  ASC_NULLS_LAST
+
+  """in descending order, nulls first"""
+  DESC
+
+  """in descending order, nulls first"""
+  DESC_NULLS_FIRST
+
+  """in descending order, nulls last"""
+  DESC_NULLS_LAST
+}
+
+"""
+columns and relationships of "staff_roles"
+"""
+type StaffRoles {
+  description: String!
+
+  """An array relationship"""
+  flightStaffs(
+    """distinct select on columns"""
+    distinctOn: [FlightStaffSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightStaffOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): [FlightStaff!]!
+
+  """An aggregate relationship"""
+  flightStaffsAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightStaffSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightStaffOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): FlightStaffAggregate!
+  value: String!
+}
+
+"""
+aggregated selection of "staff_roles"
+"""
+type StaffRolesAggregate {
+  aggregate: StaffRolesAggregateFields
+  nodes: [StaffRoles!]!
+}
+
+"""
+aggregate fields of "staff_roles"
+"""
+type StaffRolesAggregateFields {
+  count(columns: [StaffRolesSelectColumn!], distinct: Boolean): Int!
+  max: StaffRolesMaxFields
+  min: StaffRolesMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "staff_roles". All fields are combined with a logical 'AND'.
+"""
+input StaffRolesBoolExp {
+  _and: [StaffRolesBoolExp!]
+  _not: StaffRolesBoolExp
+  _or: [StaffRolesBoolExp!]
+  description: StringComparisonExp
+  flightStaffs: FlightStaffBoolExp
+  flightStaffsAggregate: FlightStaffAggregateBoolExp
+  value: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "staff_roles"
+"""
+enum StaffRolesConstraint {
+  """
+  unique or primary key constraint on columns "value"
+  """
+  staffRolesPkey
+}
+
+enum StaffRolesEnum {
+  """Co-Pilot"""
+  CO_PILOT
+
+  """Flight Attendant"""
+  FLIGHT_ATTENDANT
+
+  """Pilot"""
+  PILOT
+}
+
+"""
+Boolean expression to compare columns of type "StaffRolesEnum". All fields are combined with logical 'AND'.
+"""
+input StaffRolesEnumComparisonExp {
+  _eq: StaffRolesEnum
+  _in: [StaffRolesEnum!]
+  _isNull: Boolean
+  _neq: StaffRolesEnum
+  _nin: [StaffRolesEnum!]
+}
+
+"""
+input type for inserting data into table "staff_roles"
+"""
+input StaffRolesInsertInput {
+  description: String
+  flightStaffs: FlightStaffArrRelInsertInput
+  value: String
+}
+
+"""aggregate max on columns"""
+type StaffRolesMaxFields {
+  description: String
+  value: String
+}
+
+"""aggregate min on columns"""
+type StaffRolesMinFields {
+  description: String
+  value: String
+}
+
+"""
+response of any mutation on the table "staff_roles"
+"""
+type StaffRolesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [StaffRoles!]!
+}
+
+"""
+input type for inserting object relation for remote table "staff_roles"
+"""
+input StaffRolesObjRelInsertInput {
+  data: StaffRolesInsertInput!
+
+  """upsert condition"""
+  onConflict: StaffRolesOnConflict
+}
+
+"""
+on_conflict condition type for table "staff_roles"
+"""
+input StaffRolesOnConflict {
+  constraint: StaffRolesConstraint!
+  updateColumns: [StaffRolesUpdateColumn!]! = []
+  where: StaffRolesBoolExp
+}
+
+"""Ordering options when selecting data from "staff_roles"."""
+input StaffRolesOrderBy {
+  description: OrderBy
+  flightStaffsAggregate: FlightStaffAggregateOrderBy
+  value: OrderBy
+}
+
+"""primary key columns input for table: staff_roles"""
+input StaffRolesPkColumnsInput {
+  value: String!
+}
+
+"""
+select columns of table "staff_roles"
+"""
+enum StaffRolesSelectColumn {
+  """column name"""
+  description
+
+  """column name"""
+  value
+}
+
+"""
+input type for updating data in table "staff_roles"
+"""
+input StaffRolesSetInput {
+  description: String
+  value: String
+}
+
+"""
+Streaming cursor of the table "staff_roles"
+"""
+input StaffRolesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: StaffRolesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input StaffRolesStreamCursorValueInput {
+  description: String
+  value: String
+}
+
+"""
+update columns of table "staff_roles"
+"""
+enum StaffRolesUpdateColumn {
+  """column name"""
+  description
+
+  """column name"""
+  value
+}
+
+input StaffRolesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: StaffRolesSetInput
+
+  """filter the rows which have to be updated"""
+  where: StaffRolesBoolExp!
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input StringComparisonExp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _isNull: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+scalar Timestamptz
+
+"""
+Boolean expression to compare columns of type "Timestamptz". All fields are combined with logical 'AND'.
+"""
+input TimestamptzComparisonExp {
+  _eq: Timestamptz
+  _gt: Timestamptz
+  _gte: Timestamptz
+  _in: [Timestamptz!]
+  _isNull: Boolean
+  _lt: Timestamptz
+  _lte: Timestamptz
+  _neq: Timestamptz
+  _nin: [Timestamptz!]
+}
+
+scalar Uuid
+
+"""
+Boolean expression to compare columns of type "Uuid". All fields are combined with logical 'AND'.
+"""
+input UuidComparisonExp {
+  _eq: Uuid
+  _gt: Uuid
+  _gte: Uuid
+  _in: [Uuid!]
+  _isNull: Boolean
+  _lt: Uuid
+  _lte: Uuid
+  _neq: Uuid
+  _nin: [Uuid!]
+}
+
+input aircraftsAggregateBoolExpCount {
+  arguments: [AircraftsSelectColumn!]
+  distinct: Boolean
+  filter: AircraftsBoolExp
+  predicate: IntComparisonExp!
+}
+
+input flightStaffAggregateBoolExpCount {
+  arguments: [FlightStaffSelectColumn!]
+  distinct: Boolean
+  filter: FlightStaffBoolExp
+  predicate: IntComparisonExp!
+}
+
+input flightsAggregateBoolExpCount {
+  arguments: [FlightsSelectColumn!]
+  distinct: Boolean
+  filter: FlightsBoolExp
+  predicate: IntComparisonExp!
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "aircrafts"
+  """
+  deleteAircrafts(
+    """filter the rows which have to be deleted"""
+    where: AircraftsBoolExp!
+  ): AircraftsMutationResponse
+
+  """
+  delete single row from the table: "aircrafts"
+  """
+  deleteAircraftsByPk(id: Uuid!): Aircrafts
+
+  """
+  delete data from the table: "airlines"
+  """
+  deleteAirlines(
+    """filter the rows which have to be deleted"""
+    where: AirlinesBoolExp!
+  ): AirlinesMutationResponse
+
+  """
+  delete single row from the table: "airlines"
+  """
+  deleteAirlinesByPk(id: Uuid!): Airlines
+
+  """
+  delete data from the table: "airports"
+  """
+  deleteAirports(
+    """filter the rows which have to be deleted"""
+    where: AirportsBoolExp!
+  ): AirportsMutationResponse
+
+  """
+  delete single row from the table: "airports"
+  """
+  deleteAirportsByPk(id: Uuid!): Airports
+
+  """
+  delete data from the table: "employees"
+  """
+  deleteEmployees(
+    """filter the rows which have to be deleted"""
+    where: EmployeesBoolExp!
+  ): EmployeesMutationResponse
+
+  """
+  delete single row from the table: "employees"
+  """
+  deleteEmployeesByPk(id: Uuid!): Employees
+
+  """
+  delete data from the table: "flight_staff"
+  """
+  deleteFlightStaff(
+    """filter the rows which have to be deleted"""
+    where: FlightStaffBoolExp!
+  ): FlightStaffMutationResponse
+
+  """
+  delete single row from the table: "flight_staff"
+  """
+  deleteFlightStaffByPk(employeeId: Uuid!, flightId: Uuid!): FlightStaff
+
+  """
+  delete data from the table: "flights"
+  """
+  deleteFlights(
+    """filter the rows which have to be deleted"""
+    where: FlightsBoolExp!
+  ): FlightsMutationResponse
+
+  """
+  delete single row from the table: "flights"
+  """
+  deleteFlightsByPk(id: Uuid!): Flights
+
+  """
+  delete data from the table: "manufacturers"
+  """
+  deleteManufacturers(
+    """filter the rows which have to be deleted"""
+    where: ManufacturersBoolExp!
+  ): ManufacturersMutationResponse
+
+  """
+  delete single row from the table: "manufacturers"
+  """
+  deleteManufacturersByPk(id: Uuid!): Manufacturers
+
+  """
+  delete data from the table: "staff_roles"
+  """
+  deleteStaffRoles(
+    """filter the rows which have to be deleted"""
+    where: StaffRolesBoolExp!
+  ): StaffRolesMutationResponse
+
+  """
+  delete single row from the table: "staff_roles"
+  """
+  deleteStaffRolesByPk(value: String!): StaffRoles
+
+  """
+  insert data into the table: "aircrafts"
+  """
+  insertAircrafts(
+    """the rows to be inserted"""
+    objects: [AircraftsInsertInput!]!
+
+    """upsert condition"""
+    onConflict: AircraftsOnConflict
+  ): AircraftsMutationResponse
+
+  """
+  insert a single row into the table: "aircrafts"
+  """
+  insertAircraftsOne(
+    """the row to be inserted"""
+    object: AircraftsInsertInput!
+
+    """upsert condition"""
+    onConflict: AircraftsOnConflict
+  ): Aircrafts
+
+  """
+  insert data into the table: "airlines"
+  """
+  insertAirlines(
+    """the rows to be inserted"""
+    objects: [AirlinesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: AirlinesOnConflict
+  ): AirlinesMutationResponse
+
+  """
+  insert a single row into the table: "airlines"
+  """
+  insertAirlinesOne(
+    """the row to be inserted"""
+    object: AirlinesInsertInput!
+
+    """upsert condition"""
+    onConflict: AirlinesOnConflict
+  ): Airlines
+
+  """
+  insert data into the table: "airports"
+  """
+  insertAirports(
+    """the rows to be inserted"""
+    objects: [AirportsInsertInput!]!
+
+    """upsert condition"""
+    onConflict: AirportsOnConflict
+  ): AirportsMutationResponse
+
+  """
+  insert a single row into the table: "airports"
+  """
+  insertAirportsOne(
+    """the row to be inserted"""
+    object: AirportsInsertInput!
+
+    """upsert condition"""
+    onConflict: AirportsOnConflict
+  ): Airports
+
+  """
+  insert data into the table: "employees"
+  """
+  insertEmployees(
+    """the rows to be inserted"""
+    objects: [EmployeesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: EmployeesOnConflict
+  ): EmployeesMutationResponse
+
+  """
+  insert a single row into the table: "employees"
+  """
+  insertEmployeesOne(
+    """the row to be inserted"""
+    object: EmployeesInsertInput!
+
+    """upsert condition"""
+    onConflict: EmployeesOnConflict
+  ): Employees
+
+  """
+  insert data into the table: "flight_staff"
+  """
+  insertFlightStaff(
+    """the rows to be inserted"""
+    objects: [FlightStaffInsertInput!]!
+
+    """upsert condition"""
+    onConflict: FlightStaffOnConflict
+  ): FlightStaffMutationResponse
+
+  """
+  insert a single row into the table: "flight_staff"
+  """
+  insertFlightStaffOne(
+    """the row to be inserted"""
+    object: FlightStaffInsertInput!
+
+    """upsert condition"""
+    onConflict: FlightStaffOnConflict
+  ): FlightStaff
+
+  """
+  insert data into the table: "flights"
+  """
+  insertFlights(
+    """the rows to be inserted"""
+    objects: [FlightsInsertInput!]!
+
+    """upsert condition"""
+    onConflict: FlightsOnConflict
+  ): FlightsMutationResponse
+
+  """
+  insert a single row into the table: "flights"
+  """
+  insertFlightsOne(
+    """the row to be inserted"""
+    object: FlightsInsertInput!
+
+    """upsert condition"""
+    onConflict: FlightsOnConflict
+  ): Flights
+
+  """
+  insert data into the table: "manufacturers"
+  """
+  insertManufacturers(
+    """the rows to be inserted"""
+    objects: [ManufacturersInsertInput!]!
+
+    """upsert condition"""
+    onConflict: ManufacturersOnConflict
+  ): ManufacturersMutationResponse
+
+  """
+  insert a single row into the table: "manufacturers"
+  """
+  insertManufacturersOne(
+    """the row to be inserted"""
+    object: ManufacturersInsertInput!
+
+    """upsert condition"""
+    onConflict: ManufacturersOnConflict
+  ): Manufacturers
+
+  """
+  insert data into the table: "staff_roles"
+  """
+  insertStaffRoles(
+    """the rows to be inserted"""
+    objects: [StaffRolesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: StaffRolesOnConflict
+  ): StaffRolesMutationResponse
+
+  """
+  insert a single row into the table: "staff_roles"
+  """
+  insertStaffRolesOne(
+    """the row to be inserted"""
+    object: StaffRolesInsertInput!
+
+    """upsert condition"""
+    onConflict: StaffRolesOnConflict
+  ): StaffRoles
+
+  """
+  update data of the table: "aircrafts"
+  """
+  updateAircrafts(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AircraftsSetInput
+
+    """filter the rows which have to be updated"""
+    where: AircraftsBoolExp!
+  ): AircraftsMutationResponse
+
+  """
+  update single row of the table: "aircrafts"
+  """
+  updateAircraftsByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AircraftsSetInput
+    pkColumns: AircraftsPkColumnsInput!
+  ): Aircrafts
+
+  """
+  update multiples rows of table: "aircrafts"
+  """
+  updateAircraftsMany(
+    """updates to execute, in order"""
+    updates: [AircraftsUpdates!]!
+  ): [AircraftsMutationResponse]
+
+  """
+  update data of the table: "airlines"
+  """
+  updateAirlines(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AirlinesSetInput
+
+    """filter the rows which have to be updated"""
+    where: AirlinesBoolExp!
+  ): AirlinesMutationResponse
+
+  """
+  update single row of the table: "airlines"
+  """
+  updateAirlinesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AirlinesSetInput
+    pkColumns: AirlinesPkColumnsInput!
+  ): Airlines
+
+  """
+  update multiples rows of table: "airlines"
+  """
+  updateAirlinesMany(
+    """updates to execute, in order"""
+    updates: [AirlinesUpdates!]!
+  ): [AirlinesMutationResponse]
+
+  """
+  update data of the table: "airports"
+  """
+  updateAirports(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AirportsSetInput
+
+    """filter the rows which have to be updated"""
+    where: AirportsBoolExp!
+  ): AirportsMutationResponse
+
+  """
+  update single row of the table: "airports"
+  """
+  updateAirportsByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AirportsSetInput
+    pkColumns: AirportsPkColumnsInput!
+  ): Airports
+
+  """
+  update multiples rows of table: "airports"
+  """
+  updateAirportsMany(
+    """updates to execute, in order"""
+    updates: [AirportsUpdates!]!
+  ): [AirportsMutationResponse]
+
+  """
+  update data of the table: "employees"
+  """
+  updateEmployees(
+    """sets the columns of the filtered rows to the given values"""
+    _set: EmployeesSetInput
+
+    """filter the rows which have to be updated"""
+    where: EmployeesBoolExp!
+  ): EmployeesMutationResponse
+
+  """
+  update single row of the table: "employees"
+  """
+  updateEmployeesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: EmployeesSetInput
+    pkColumns: EmployeesPkColumnsInput!
+  ): Employees
+
+  """
+  update multiples rows of table: "employees"
+  """
+  updateEmployeesMany(
+    """updates to execute, in order"""
+    updates: [EmployeesUpdates!]!
+  ): [EmployeesMutationResponse]
+
+  """
+  update data of the table: "flight_staff"
+  """
+  updateFlightStaff(
+    """sets the columns of the filtered rows to the given values"""
+    _set: FlightStaffSetInput
+
+    """filter the rows which have to be updated"""
+    where: FlightStaffBoolExp!
+  ): FlightStaffMutationResponse
+
+  """
+  update single row of the table: "flight_staff"
+  """
+  updateFlightStaffByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: FlightStaffSetInput
+    pkColumns: FlightStaffPkColumnsInput!
+  ): FlightStaff
+
+  """
+  update multiples rows of table: "flight_staff"
+  """
+  updateFlightStaffMany(
+    """updates to execute, in order"""
+    updates: [FlightStaffUpdates!]!
+  ): [FlightStaffMutationResponse]
+
+  """
+  update data of the table: "flights"
+  """
+  updateFlights(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: FlightsIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: FlightsSetInput
+
+    """filter the rows which have to be updated"""
+    where: FlightsBoolExp!
+  ): FlightsMutationResponse
+
+  """
+  update single row of the table: "flights"
+  """
+  updateFlightsByPk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: FlightsIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: FlightsSetInput
+    pkColumns: FlightsPkColumnsInput!
+  ): Flights
+
+  """
+  update multiples rows of table: "flights"
+  """
+  updateFlightsMany(
+    """updates to execute, in order"""
+    updates: [FlightsUpdates!]!
+  ): [FlightsMutationResponse]
+
+  """
+  update data of the table: "manufacturers"
+  """
+  updateManufacturers(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ManufacturersSetInput
+
+    """filter the rows which have to be updated"""
+    where: ManufacturersBoolExp!
+  ): ManufacturersMutationResponse
+
+  """
+  update single row of the table: "manufacturers"
+  """
+  updateManufacturersByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ManufacturersSetInput
+    pkColumns: ManufacturersPkColumnsInput!
+  ): Manufacturers
+
+  """
+  update multiples rows of table: "manufacturers"
+  """
+  updateManufacturersMany(
+    """updates to execute, in order"""
+    updates: [ManufacturersUpdates!]!
+  ): [ManufacturersMutationResponse]
+
+  """
+  update data of the table: "staff_roles"
+  """
+  updateStaffRoles(
+    """sets the columns of the filtered rows to the given values"""
+    _set: StaffRolesSetInput
+
+    """filter the rows which have to be updated"""
+    where: StaffRolesBoolExp!
+  ): StaffRolesMutationResponse
+
+  """
+  update single row of the table: "staff_roles"
+  """
+  updateStaffRolesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: StaffRolesSetInput
+    pkColumns: StaffRolesPkColumnsInput!
+  ): StaffRoles
+
+  """
+  update multiples rows of table: "staff_roles"
+  """
+  updateStaffRolesMany(
+    """updates to execute, in order"""
+    updates: [StaffRolesUpdates!]!
+  ): [StaffRolesMutationResponse]
+}
+
+type query_root {
+  """An array relationship"""
+  aircrafts(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+
+  """An aggregate relationship"""
+  aircraftsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): AircraftsAggregate!
+
+  """fetch data from the table: "aircrafts" using primary key columns"""
+  aircraftsByPk(id: Uuid!): Aircrafts
+
+  """
+  fetch data from the table: "airlines"
+  """
+  airlines(
+    """distinct select on columns"""
+    distinctOn: [AirlinesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirlinesOrderBy!]
+
+    """filter the rows returned"""
+    where: AirlinesBoolExp
+  ): [Airlines!]!
+
+  """
+  fetch aggregated fields from the table: "airlines"
+  """
+  airlinesAggregate(
+    """distinct select on columns"""
+    distinctOn: [AirlinesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirlinesOrderBy!]
+
+    """filter the rows returned"""
+    where: AirlinesBoolExp
+  ): AirlinesAggregate!
+
+  """fetch data from the table: "airlines" using primary key columns"""
+  airlinesByPk(id: Uuid!): Airlines
+
+  """
+  fetch data from the table: "airports"
+  """
+  airports(
+    """distinct select on columns"""
+    distinctOn: [AirportsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirportsOrderBy!]
+
+    """filter the rows returned"""
+    where: AirportsBoolExp
+  ): [Airports!]!
+
+  """
+  fetch aggregated fields from the table: "airports"
+  """
+  airportsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AirportsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirportsOrderBy!]
+
+    """filter the rows returned"""
+    where: AirportsBoolExp
+  ): AirportsAggregate!
+
+  """fetch data from the table: "airports" using primary key columns"""
+  airportsByPk(id: Uuid!): Airports
+
+  """
+  fetch data from the table: "employees"
+  """
+  employees(
+    """distinct select on columns"""
+    distinctOn: [EmployeesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [EmployeesOrderBy!]
+
+    """filter the rows returned"""
+    where: EmployeesBoolExp
+  ): [Employees!]!
+
+  """
+  fetch aggregated fields from the table: "employees"
+  """
+  employeesAggregate(
+    """distinct select on columns"""
+    distinctOn: [EmployeesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [EmployeesOrderBy!]
+
+    """filter the rows returned"""
+    where: EmployeesBoolExp
+  ): EmployeesAggregate!
+
+  """fetch data from the table: "employees" using primary key columns"""
+  employeesByPk(id: Uuid!): Employees
+
+  """
+  fetch data from the table: "flight_staff"
+  """
+  flightStaff(
+    """distinct select on columns"""
+    distinctOn: [FlightStaffSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightStaffOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): [FlightStaff!]!
+
+  """
+  fetch aggregated fields from the table: "flight_staff"
+  """
+  flightStaffAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightStaffSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightStaffOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): FlightStaffAggregate!
+
+  """fetch data from the table: "flight_staff" using primary key columns"""
+  flightStaffByPk(employeeId: Uuid!, flightId: Uuid!): FlightStaff
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """An aggregate relationship"""
+  flightsAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+
+  """fetch data from the table: "flights" using primary key columns"""
+  flightsByPk(id: Uuid!): Flights
+
+  """
+  fetch data from the table: "manufacturers"
+  """
+  manufacturers(
+    """distinct select on columns"""
+    distinctOn: [ManufacturersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ManufacturersOrderBy!]
+
+    """filter the rows returned"""
+    where: ManufacturersBoolExp
+  ): [Manufacturers!]!
+
+  """
+  fetch aggregated fields from the table: "manufacturers"
+  """
+  manufacturersAggregate(
+    """distinct select on columns"""
+    distinctOn: [ManufacturersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ManufacturersOrderBy!]
+
+    """filter the rows returned"""
+    where: ManufacturersBoolExp
+  ): ManufacturersAggregate!
+
+  """fetch data from the table: "manufacturers" using primary key columns"""
+  manufacturersByPk(id: Uuid!): Manufacturers
+
+  """
+  fetch data from the table: "staff_roles"
+  """
+  staffRoles(
+    """distinct select on columns"""
+    distinctOn: [StaffRolesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [StaffRolesOrderBy!]
+
+    """filter the rows returned"""
+    where: StaffRolesBoolExp
+  ): [StaffRoles!]!
+
+  """
+  fetch aggregated fields from the table: "staff_roles"
+  """
+  staffRolesAggregate(
+    """distinct select on columns"""
+    distinctOn: [StaffRolesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [StaffRolesOrderBy!]
+
+    """filter the rows returned"""
+    where: StaffRolesBoolExp
+  ): StaffRolesAggregate!
+
+  """fetch data from the table: "staff_roles" using primary key columns"""
+  staffRolesByPk(value: String!): StaffRoles
+}
+
+type subscription_root {
+  """An array relationship"""
+  aircrafts(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+
+  """An aggregate relationship"""
+  aircraftsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AircraftsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AircraftsOrderBy!]
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): AircraftsAggregate!
+
+  """fetch data from the table: "aircrafts" using primary key columns"""
+  aircraftsByPk(id: Uuid!): Aircrafts
+
+  """
+  fetch data from the table in a streaming manner: "aircrafts"
+  """
+  aircraftsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [AircraftsStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: AircraftsBoolExp
+  ): [Aircrafts!]!
+
+  """
+  fetch data from the table: "airlines"
+  """
+  airlines(
+    """distinct select on columns"""
+    distinctOn: [AirlinesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirlinesOrderBy!]
+
+    """filter the rows returned"""
+    where: AirlinesBoolExp
+  ): [Airlines!]!
+
+  """
+  fetch aggregated fields from the table: "airlines"
+  """
+  airlinesAggregate(
+    """distinct select on columns"""
+    distinctOn: [AirlinesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirlinesOrderBy!]
+
+    """filter the rows returned"""
+    where: AirlinesBoolExp
+  ): AirlinesAggregate!
+
+  """fetch data from the table: "airlines" using primary key columns"""
+  airlinesByPk(id: Uuid!): Airlines
+
+  """
+  fetch data from the table in a streaming manner: "airlines"
+  """
+  airlinesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [AirlinesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: AirlinesBoolExp
+  ): [Airlines!]!
+
+  """
+  fetch data from the table: "airports"
+  """
+  airports(
+    """distinct select on columns"""
+    distinctOn: [AirportsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirportsOrderBy!]
+
+    """filter the rows returned"""
+    where: AirportsBoolExp
+  ): [Airports!]!
+
+  """
+  fetch aggregated fields from the table: "airports"
+  """
+  airportsAggregate(
+    """distinct select on columns"""
+    distinctOn: [AirportsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [AirportsOrderBy!]
+
+    """filter the rows returned"""
+    where: AirportsBoolExp
+  ): AirportsAggregate!
+
+  """fetch data from the table: "airports" using primary key columns"""
+  airportsByPk(id: Uuid!): Airports
+
+  """
+  fetch data from the table in a streaming manner: "airports"
+  """
+  airportsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [AirportsStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: AirportsBoolExp
+  ): [Airports!]!
+
+  """
+  fetch data from the table: "employees"
+  """
+  employees(
+    """distinct select on columns"""
+    distinctOn: [EmployeesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [EmployeesOrderBy!]
+
+    """filter the rows returned"""
+    where: EmployeesBoolExp
+  ): [Employees!]!
+
+  """
+  fetch aggregated fields from the table: "employees"
+  """
+  employeesAggregate(
+    """distinct select on columns"""
+    distinctOn: [EmployeesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [EmployeesOrderBy!]
+
+    """filter the rows returned"""
+    where: EmployeesBoolExp
+  ): EmployeesAggregate!
+
+  """fetch data from the table: "employees" using primary key columns"""
+  employeesByPk(id: Uuid!): Employees
+
+  """
+  fetch data from the table in a streaming manner: "employees"
+  """
+  employeesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [EmployeesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: EmployeesBoolExp
+  ): [Employees!]!
+
+  """
+  fetch data from the table: "flight_staff"
+  """
+  flightStaff(
+    """distinct select on columns"""
+    distinctOn: [FlightStaffSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightStaffOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): [FlightStaff!]!
+
+  """
+  fetch aggregated fields from the table: "flight_staff"
+  """
+  flightStaffAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightStaffSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightStaffOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): FlightStaffAggregate!
+
+  """fetch data from the table: "flight_staff" using primary key columns"""
+  flightStaffByPk(employeeId: Uuid!, flightId: Uuid!): FlightStaff
+
+  """
+  fetch data from the table in a streaming manner: "flight_staff"
+  """
+  flightStaffStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [FlightStaffStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: FlightStaffBoolExp
+  ): [FlightStaff!]!
+
+  """An array relationship"""
+  flights(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """An aggregate relationship"""
+  flightsAggregate(
+    """distinct select on columns"""
+    distinctOn: [FlightsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [FlightsOrderBy!]
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): FlightsAggregate!
+
+  """fetch data from the table: "flights" using primary key columns"""
+  flightsByPk(id: Uuid!): Flights
+
+  """
+  fetch data from the table in a streaming manner: "flights"
+  """
+  flightsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [FlightsStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: FlightsBoolExp
+  ): [Flights!]!
+
+  """
+  fetch data from the table: "manufacturers"
+  """
+  manufacturers(
+    """distinct select on columns"""
+    distinctOn: [ManufacturersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ManufacturersOrderBy!]
+
+    """filter the rows returned"""
+    where: ManufacturersBoolExp
+  ): [Manufacturers!]!
+
+  """
+  fetch aggregated fields from the table: "manufacturers"
+  """
+  manufacturersAggregate(
+    """distinct select on columns"""
+    distinctOn: [ManufacturersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ManufacturersOrderBy!]
+
+    """filter the rows returned"""
+    where: ManufacturersBoolExp
+  ): ManufacturersAggregate!
+
+  """fetch data from the table: "manufacturers" using primary key columns"""
+  manufacturersByPk(id: Uuid!): Manufacturers
+
+  """
+  fetch data from the table in a streaming manner: "manufacturers"
+  """
+  manufacturersStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ManufacturersStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: ManufacturersBoolExp
+  ): [Manufacturers!]!
+
+  """
+  fetch data from the table: "staff_roles"
+  """
+  staffRoles(
+    """distinct select on columns"""
+    distinctOn: [StaffRolesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [StaffRolesOrderBy!]
+
+    """filter the rows returned"""
+    where: StaffRolesBoolExp
+  ): [StaffRoles!]!
+
+  """
+  fetch aggregated fields from the table: "staff_roles"
+  """
+  staffRolesAggregate(
+    """distinct select on columns"""
+    distinctOn: [StaffRolesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [StaffRolesOrderBy!]
+
+    """filter the rows returned"""
+    where: StaffRolesBoolExp
+  ): StaffRolesAggregate!
+
+  """fetch data from the table: "staff_roles" using primary key columns"""
+  staffRolesByPk(value: String!): StaffRoles
+
+  """
+  fetch data from the table in a streaming manner: "staff_roles"
+  """
+  staffRolesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [StaffRolesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: StaffRolesBoolExp
+  ): [StaffRoles!]!
+}
+

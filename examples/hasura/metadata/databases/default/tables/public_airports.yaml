@@ -1,0 +1,18 @@
+table:
+  name: airports
+  schema: public
+array_relationships:
+  - name: flights
+    using:
+      foreign_key_constraint_on:
+        column: arriving_airport_id
+        table:
+          name: flights
+          schema: public
+  - name: flightsByDepartingAirportId
+    using:
+      foreign_key_constraint_on:
+        column: departing_airport_id
+        table:
+          name: flights
+          schema: public

@@ -1,0 +1,18 @@
+table:
+  name: airlines
+  schema: public
+array_relationships:
+  - name: aircrafts
+    using:
+      foreign_key_constraint_on:
+        column: airline_id
+        table:
+          name: aircrafts
+          schema: public
+  - name: flights
+    using:
+      foreign_key_constraint_on:
+        column: airline_id
+        table:
+          name: flights
+          schema: public

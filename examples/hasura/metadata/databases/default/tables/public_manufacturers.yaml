@@ -1,0 +1,11 @@
+table:
+  name: manufacturers
+  schema: public
+array_relationships:
+  - name: aircrafts
+    using:
+      foreign_key_constraint_on:
+        column: manufacturer_id
+        table:
+          name: aircrafts
+          schema: public

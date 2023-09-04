@@ -1,0 +1,7 @@
+table:
+  name: flight_staff
+  schema: public
+object_relationships:
+  - name: staffRole
+    using:
+      foreign_key_constraint_on: role
