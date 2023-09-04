@@ -14,20 +14,25 @@ attention to the few types I cared about.
 
 ## Example
 
-```graphql
-schema {
-  query: query_root
-  mutation: mutation_root
-  subscription: subscription_root
-}
+For a realistic example of what a Hasura GraphQL schema looks like, check out 
+our example [**SDL file**][sdl-file] (Schema Definition Language).
 
-type query_root {
-}
-```
+[sdl-file]: ./examples/hasura.sdl.graphqls
 
 ## Getting Started
 
 ### Installing
+
+Eventually, I may package this up in Tea and maybe even Homebrew (via 
+[Goreleaser][goreleaser-brew]).
+
+For the time being, it should be installable with Go:
+
+```shell
+go install github.com/kevinmichaelchen/graphql-schema-picker@latest
+```
+
+[goreleaser-brew]: https://goreleaser.com/customization/homebrew/
 
 ### Usage
 

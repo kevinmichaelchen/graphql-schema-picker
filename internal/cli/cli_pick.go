@@ -33,6 +33,9 @@ func fnPick(cmd *cobra.Command, args []string) {
 	// We need something flatter and more ergonomic: like a couple of maps!
 	g := buildSchemaGraph(astDoc)
 
+	// Build a visual diagram of the new SDL
 	file, _ := os.Create("./simple.gv")
 	_ = draw.DOT(g, file)
+
+	// TODO convert the GRAPH to an SDL
 }

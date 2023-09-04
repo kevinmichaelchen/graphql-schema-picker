@@ -6,7 +6,6 @@ import (
 	"github.com/dominikbraun/graph"
 	"github.com/graphql-go/graphql/language/ast"
 	"github.com/graphql-go/graphql/language/kinds"
-	"github.com/sanity-io/litter"
 )
 
 type Vertex struct {
@@ -63,7 +62,8 @@ func buildSchemaGraph(doc *ast.Document) graph.Graph[string, Vertex] {
 	// Build edges between vertices.
 	buildEdges(g, doc)
 
-	return g
+	// Prunes any vertices that don't appear in any edges
+	return prune(g)
 }
 
 func loadTopLevelDefinitions(g graph.Graph[string, Vertex], doc *ast.Document) {
@@ -102,25 +102,80 @@ func buildEdges(g graph.Graph[string, Vertex], doc *ast.Document) {
 		}
 
 		switch v.Node.GetKind() {
+		// TODO support input objects, input values, interfaces, and unions
 		case kinds.ObjectDefinition:
 			obj := v.Node.(*ast.ObjectDefinition)
 			fields := obj.Fields
 			// TODO iterate through node's fields
 			for _, f := range fields {
+
+				// Is the field a primitive scalar (e.g., Int, String)?
+				// If so, we can skip it, as it's natively a part of any
+				// GraphQL schema.
 				rootType := getRootTypeNameHelper(f.Type, 0)
 				if isBasicType(rootType) {
 					continue
 				}
-				log.Debug("field",
+
+				log.Debug("Found field in object",
+					"object", obj.Name.Value,
 					"name", f.Name.Value,
 					"type", rootType,
 				)
-				litter.Dump(f.Arguments)
+
+				_ = g.AddEdge(obj.Name.Value, rootType)
+
+				// TODO Fields also consist of their arguments, which themselves
+				// may be non-primitive dependencies.
+				//litter.Dump(f.Arguments)
 			}
 		}
+	}
+}
 
+func prune(in graph.Graph[string, Vertex]) graph.Graph[string, Vertex] {
+	m, err := in.AdjacencyMap()
+	if err != nil {
+		log.Fatal("unable to retrieve adjacency map", "err", err)
 	}
 
+	out := graph.New(VertexHash)
+	for defName, edges := range m {
+		if !isDesired(defName) {
+			continue
+		}
+
+		def := must(in.Vertex(defName))
+
+		// Add vertex
+		_ = out.AddVertex(def)
+
+		// Add its dependent vertices
+		for depName := range edges {
+			dep := must(in.Vertex(depName))
+			_ = out.AddVertex(dep)
+			_ = out.AddEdge(defName, depName)
+		}
+	}
+
+	return out
+}
+
+func must(v Vertex, err error) Vertex {
+	if err != nil {
+		log.Fatal("unable to find vertex", "err", err)
+	}
+	return v
+}
+
+func isDesired(definitionName string) bool {
+	for _, d := range desiredDefinitions {
+		if definitionName == d {
+			return true
+		}
+	}
+
+	return false
 }
 
 func isBasicType(t string) bool {
