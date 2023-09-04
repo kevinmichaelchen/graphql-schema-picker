@@ -30,3 +30,11 @@ type query_root {
 ### Installing
 
 ### Usage
+
+```shell
+go run cmd/graphql-schema-picker/main.go \
+  --debug \
+  pick \
+    --sdl-file examples/hasura.sdl.graphqls \
+    --definitions Aircrafts
+```
