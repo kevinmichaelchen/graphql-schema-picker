@@ -57,3 +57,13 @@ hasura --project hasura \
     --from 1693763548205 \
     --name init
 ```
+
+### introspect
+
+Introspect the Hasura schema — i.e., the Schema Definition Language (SDL) file.
+
+```shell
+npx graphqurl -- \
+  http://localhost:8080/v1/graphql \
+  --introspect > hasura.sdl.graphqls
+```

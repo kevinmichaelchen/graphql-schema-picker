@@ -1,4 +1,4 @@
-# graphql-schema-pruner
+# graphql-schema-picker
 
 A CLI for selectively pruning your GraphQL schemas.
 
