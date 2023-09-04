@@ -43,3 +43,11 @@ go run cmd/graphql-schema-picker/main.go \
     --sdl-file examples/hasura.sdl.graphqls \
     --definitions Aircrafts
 ```
+
+## Similar Tools
+
+- https://github.com/n1ru4l/graphql-public-schema-filter
+- https://github.com/kesne/graphql-schema-subset
+- https://github.com/xometry/graphql-code-generator-subset-plugin
+- https://the-guild.dev/graphql/tools/docs/api/classes/wrap_src.pruneschema
+- https://pothos-graphql.dev/docs/plugins/sub-graph

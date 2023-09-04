@@ -9,7 +9,7 @@ import (
 )
 
 func printSDL(doc *ast.Document) {
-	sdl := printer.Print(doc)
+	log.Infof("Printing new SDL to file with %d definitions", len(doc.Definitions))
 
 	// Create a new file where we'll write the new SDL
 	// TODO make configurable
@@ -22,8 +22,18 @@ func printSDL(doc *ast.Document) {
 
 	w := bufio.NewWriter(f)
 
-	_, err = w.WriteString(sdl.(string))
+	sdl := printer.Print(doc)
+
+	sdlString, ok := sdl.(string)
+	if !ok {
+		log.Fatal("expected SDL to be a string")
+	}
+
+	log.Debug(sdlString)
+
+	_, err = w.WriteString(sdlString)
 	if err != nil {
 		log.Fatal("unable to produce new SDL file", "err", err)
 	}
+	defer w.Flush()
 }
