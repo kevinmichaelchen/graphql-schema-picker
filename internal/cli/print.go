@@ -12,8 +12,7 @@ func printSDL(doc *ast.Document) {
 	log.Infof("Printing new SDL to file with %d definitions", len(doc.Definitions))
 
 	// Create a new file where we'll write the new SDL
-	// TODO make configurable
-	f, err := os.Create("output.sdl.graphqls")
+	f, err := os.Create(output)
 	if err != nil {
 		log.Fatal("unable to create new SDL file for writing", "err", err)
 	}
