@@ -39,9 +39,10 @@ go install github.com/kevinmichaelchen/graphql-schema-picker@latest
 ### Usage
 
 ```shell
-go run cmd/graphql-schema-picker/main.go \
+graphql-schema-picker \
   --debug \
   pick \
+    --output output.sdl.graphqls \
     --sdl-file examples/hasura.sdl.graphqls \
     --definitions Aircrafts
 ```
@@ -53,3 +54,38 @@ go run cmd/graphql-schema-picker/main.go \
 - https://github.com/xometry/graphql-code-generator-subset-plugin
 - https://the-guild.dev/graphql/tools/docs/api/classes/wrap_src.pruneschema
 - https://pothos-graphql.dev/docs/plugins/sub-graph
+
+## Contributing
+
+### Building
+
+```shell
+go run cmd/graphql-schema-picker/main.go \
+  --debug \
+  pick \
+    --output output.sdl.graphqls \
+    --sdl-file examples/hasura.sdl.graphqls \
+    --definitions Aircrafts
+```
+
+### Releasing
+
+Create tags with `xc tag` and push them with `git push --tags`.
+
+## Tasks
+
+### build
+
+Builds the Go program into a local binary.
+
+```shell
+go build -v -trimpath -ldflags="-s -w" -o ./bin/graphql-schema-picker ./cmd/graphql-schema-picker
+```
+
+### tag
+
+Create a new Git tag
+
+```shell
+git tag -a $(svu next) -m "$(svu next)"
+```
