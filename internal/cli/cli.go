@@ -24,6 +24,7 @@ var (
 	debug              bool
 	dryRun             bool
 	desiredDefinitions []string
+	output             string
 )
 
 func init() {
@@ -34,6 +35,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "", false, "dry run")
 
 	pick.Flags().StringSliceVarP(&desiredDefinitions, "definitions", "d", []string{}, "definitions from the SDL you want to pick/keep")
+	pick.Flags().StringVarP(&output, "output", "o", "", "where the resulting schema/SDL file is written")
 }
 
 func Main() {
