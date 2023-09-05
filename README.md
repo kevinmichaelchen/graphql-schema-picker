@@ -1,5 +1,7 @@
 # graphql-schema-picker
 
+<img width="600" src="https://github.com/kevinmichaelchen/graphql-schema-picker/assets/5129994/0b7c6707-a76f-4a49-9539-279969307fc8" />
+
 A CLI for selectively pruning your GraphQL schemas.
 
 The CLI accepts a Schema Definition Language file, and then selectively picks 
