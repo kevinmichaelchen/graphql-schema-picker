@@ -32,23 +32,28 @@ our example [**SDL file**][sdl-file] (Schema Definition Language).
 Eventually, I may package this up in Tea and maybe even Homebrew (via
 [Goreleaser][goreleaser-brew]).
 
-For the time being, it should be installable with Go:
+[goreleaser-brew]: https://goreleaser.com/customization/homebrew/
+
+#### With `go install`
 
 ```shell
 go install github.com/kevinmichaelchen/graphql-schema-picker@latest
 ```
 
-[goreleaser-brew]: https://goreleaser.com/customization/homebrew/
-
-### Usage
+#### With Docker
 
 ```shell
-graphql-schema-picker \
-  --debug \
-  pick \
-    --output output.sdl.graphqls \
-    --sdl-file examples/hasura.sdl.graphqls \
-    --definitions Aircrafts
+docker pull ghcr.io/kevinmichaelchen/graphql-schema-picker
+docker run --rm ghcr.io/kevinmichaelchen/graphql-schema-picker --help
+
+docker run --rm \
+  -v $(pwd)/examples:/examples \
+  ghcr.io/kevinmichaelchen/graphql-schema-picker \
+    --debug \
+    pick \
+      --output /examples/pruned.sdl.graphqls \
+      --sdl-file /examples/hasura.sdl.graphqls \
+      --definitions Aircrafts
 ```
 
 ## Similar Tools
@@ -67,7 +72,7 @@ graphql-schema-picker \
 go run cmd/graphql-schema-picker/main.go \
   --debug \
   pick \
-    --output output.sdl.graphqls \
+    --output examples/pruned.sdl.graphqls \
     --sdl-file examples/hasura.sdl.graphqls \
     --definitions Aircrafts
 ```
@@ -83,7 +88,7 @@ Create tags with `xc tag` and push them with `git push --tags`.
 Builds the Go program into a local binary.
 
 ```shell
-go build -v -trimpath -ldflags="-s -w" -o ./bin/graphql-schema-picker ./cmd/graphql-schema-picker
+goreleaser build --clean --single-target
 ```
 
 ### tag

@@ -1,3 +1,5 @@
+# Added by GoReleaser
+dist/
+
+# JetBrains
 .idea
-/build
-/bin
