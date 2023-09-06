@@ -20,6 +20,7 @@ var rootCmd = &cobra.Command{
 }
 
 var (
+	ldFlags            LDFlags
 	sdlFile            string
 	debug              bool
 	dryRun             bool
@@ -27,8 +28,17 @@ var (
 	output             string
 )
 
+// LDFlags contain fields that get linked and compiled into the final binary
+// program at build time.
+type LDFlags struct {
+	Version string
+	Commit  string
+	Date    string
+}
+
 func init() {
 	rootCmd.AddCommand(pick)
+	rootCmd.AddCommand(versionCmd)
 
 	rootCmd.PersistentFlags().StringVarP(&sdlFile, "sdl-file", "f", "", "path to an SDL file")
 	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "", false, "verbose debug logging")
@@ -38,7 +48,8 @@ func init() {
 	pick.Flags().StringVarP(&output, "output", "o", "", "where the resulting schema/SDL file is written")
 }
 
-func Main() {
+func Main(ldf LDFlags) {
+	ldFlags = ldf
 	if err := rootCmd.Execute(); err != nil {
 		log.Error("execution failed", "err", err)
 		os.Exit(1)
