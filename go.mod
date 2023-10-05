@@ -3,10 +3,9 @@ module github.com/kevinmichaelchen/graphql-schema-picker
 go 1.21.0
 
 require (
-	github.com/charmbracelet/log v0.2.4
+	github.com/charmbracelet/log v0.2.5
 	github.com/dominikbraun/graph v0.23.0
 	github.com/graphql-go/graphql v0.8.1
-	github.com/sanity-io/litter v1.5.5
 	github.com/spf13/cobra v1.7.0
 )
 
