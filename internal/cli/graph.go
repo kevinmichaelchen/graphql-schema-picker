@@ -1,11 +1,12 @@
 package cli
 
 import (
+	"strings"
+
 	"github.com/charmbracelet/log"
 	"github.com/dominikbraun/graph"
 	"github.com/graphql-go/graphql/language/ast"
 	"github.com/graphql-go/graphql/language/kinds"
-	"strings"
 )
 
 type Vertex struct {

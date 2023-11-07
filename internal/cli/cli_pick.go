@@ -1,10 +1,11 @@
 package cli
 
 import (
+	"os"
+
 	"github.com/charmbracelet/log"
 	"github.com/dominikbraun/graph/draw"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var pick = &cobra.Command{
