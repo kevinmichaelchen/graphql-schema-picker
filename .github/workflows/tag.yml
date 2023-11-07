@@ -18,7 +18,8 @@ jobs:
           git config --local user.name "GitHub Actions"
         shell: bash
 
-      - uses: pkgxdev/dev@v1
+      - name: Setup pkgx
+        uses: pkgxdev/setup@v1
 
       - name: Create Git Tag
         run: |
