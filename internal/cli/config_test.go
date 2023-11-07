@@ -9,10 +9,12 @@ import (
 const blob = `
 [[type]]
 name = "PersonInsertInput"
+new_name = "SvcPersonInsertInput"
 deny_list = ["address"]
 
 [[type]]
 name = "Person"
+new_name = "SvcPerson"
 deny_list = ["address"]
 `
 
@@ -26,10 +28,12 @@ func TestDecode(t *testing.T) {
 		Types: []Type{
 			{
 				Name:     "PersonInsertInput",
+				NewName:  "SvcPersonInsertInput",
 				DenyList: []string{"address"},
 			},
 			{
 				Name:     "Person",
+				NewName:  "SvcPerson",
 				DenyList: []string{"address"},
 			},
 		},

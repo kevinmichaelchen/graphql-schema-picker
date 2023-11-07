@@ -18,7 +18,14 @@ type Describer interface {
 	GetDescription() *ast.StringValue
 }
 
-func sanitizeComment(d Describer) string {
+func sanitizeComment(d Describer) *ast.StringValue {
+	return &ast.StringValue{
+		Kind:  kinds.StringValue,
+		Value: sanitizeCommentText(d),
+	}
+}
+
+func sanitizeCommentText(d Describer) string {
 	desc := d.GetDescription()
 	if desc == nil {
 		return ""
@@ -37,10 +44,7 @@ func NewVertex(node ast.Node) Vertex {
 
 		// Sanitize description (e.g., remove double-quotes)
 		if obj.Description != nil {
-			obj.Description = &ast.StringValue{
-				Kind:  kinds.StringValue,
-				Value: sanitizeComment(obj),
-			}
+			obj.Description = sanitizeComment(obj)
 		}
 	case kinds.InterfaceDefinition:
 		obj := node.(*ast.InterfaceDefinition)
@@ -48,10 +52,7 @@ func NewVertex(node ast.Node) Vertex {
 
 		// Sanitize description (e.g., remove double-quotes)
 		if obj.Description != nil {
-			obj.Description = &ast.StringValue{
-				Kind:  kinds.StringValue,
-				Value: sanitizeComment(obj),
-			}
+			obj.Description = sanitizeComment(obj)
 		}
 	case kinds.UnionDefinition:
 		obj := node.(*ast.UnionDefinition)
@@ -59,10 +60,7 @@ func NewVertex(node ast.Node) Vertex {
 
 		// Sanitize description (e.g., remove double-quotes)
 		if obj.Description != nil {
-			obj.Description = &ast.StringValue{
-				Kind:  kinds.StringValue,
-				Value: sanitizeComment(obj),
-			}
+			obj.Description = sanitizeComment(obj)
 		}
 	case kinds.EnumDefinition:
 		obj := node.(*ast.EnumDefinition)
@@ -70,10 +68,7 @@ func NewVertex(node ast.Node) Vertex {
 
 		// Sanitize description (e.g., remove double-quotes)
 		if obj.Description != nil {
-			obj.Description = &ast.StringValue{
-				Kind:  kinds.StringValue,
-				Value: sanitizeComment(obj),
-			}
+			obj.Description = sanitizeComment(obj)
 		}
 	case kinds.InputObjectDefinition:
 		obj := node.(*ast.InputObjectDefinition)
@@ -81,10 +76,7 @@ func NewVertex(node ast.Node) Vertex {
 
 		// Sanitize description (e.g., remove double-quotes)
 		if obj.Description != nil {
-			obj.Description = &ast.StringValue{
-				Kind:  kinds.StringValue,
-				Value: sanitizeComment(obj),
-			}
+			obj.Description = sanitizeComment(obj)
 		}
 
 	case kinds.ObjectDefinition:
@@ -93,10 +85,7 @@ func NewVertex(node ast.Node) Vertex {
 
 		// Sanitize description (e.g., remove double-quotes)
 		if obj.Description != nil {
-			obj.Description = &ast.StringValue{
-				Kind:  kinds.StringValue,
-				Value: sanitizeComment(obj),
-			}
+			obj.Description = sanitizeComment(obj)
 		}
 	default:
 		panic("NewVertex: unsupported node kind: " + node.GetKind())
@@ -126,9 +115,7 @@ func buildPrunedGraph(doc *ast.Document) graph.Graph[string, Vertex] {
 	// Build edges between vertices.
 	buildEdges(g)
 
-	// Prune our graph:
-	// 1. We filter out any vertices (GQL types) that we don't explicitly want
-	// 2. We filter out any fields within those GQL types
+	// Prune out any GraphQL types and fields that we don't want
 	return prune(g)
 }
 
@@ -161,13 +148,13 @@ func loadTopLevelDefinitions(g graph.Graph[string, Vertex], doc *ast.Document) {
 // 1. We filter out any vertices (GQL types) that we don't explicitly want
 // 2. We filter out any fields within those GQL types
 func prune(in graph.Graph[string, Vertex]) graph.Graph[string, Vertex] {
-	m, err := in.AdjacencyMap()
+	adjacencyMap, err := in.AdjacencyMap()
 	if err != nil {
 		log.Fatal("unable to retrieve adjacency map", "err", err)
 	}
 
 	out := graph.New(VertexHash)
-	for defName, edges := range m {
+	for defName, edges := range adjacencyMap {
 		if !isDesired(defName) {
 			continue
 		}
@@ -175,8 +162,8 @@ func prune(in graph.Graph[string, Vertex]) graph.Graph[string, Vertex] {
 		// Retrieve the vertex (GraphQL type) by its name
 		def := must(in.Vertex(defName))
 
-		// TODO clone the type definition and filter out fields
-		//  def = filter(clone(def))
+		// Clone the GraphQL type definition and perform field filtering
+		def = NewVertex(filterDef(def))
 
 		// Add vertex (GraphQL type) to our new, outgoing graph
 		_ = out.AddVertex(def)
