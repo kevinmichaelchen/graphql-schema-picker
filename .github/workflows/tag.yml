@@ -18,8 +18,9 @@ jobs:
           git config --local user.name "GitHub Actions"
         shell: bash
 
+      - uses: pkgxdev/dev@v1
+
       - name: Create Git Tag
-        uses: pkgxdev/setup@v1
         run: |
           export CURRENT_TAG=$(pkgx svu@latest current)
           export NEXT_TAG=$(pkgx svu@latest next)
