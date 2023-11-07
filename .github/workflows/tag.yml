@@ -30,9 +30,11 @@ jobs:
         run: |
           export CURRENT_TAG=$(pkgx svu@latest current)
           export NEXT_TAG=$(pkgx svu@latest next)
-          echo $CURRENT_TAG
-          echo $NEXT_TAG
+          echo Current tag is: $CURRENT_TAG
+          echo Next tag is: $NEXT_TAG
           if [[ "$CURRENT_TAG" != "$NEXT_TAG" || -z "$CURRENT_TAG" ]]; then
             git tag $NEXT_TAG && git push origin refs/tags/"$NEXT_TAG"
+          then
+            echo "Skipping tag push :)"
           fi
         shell: bash
