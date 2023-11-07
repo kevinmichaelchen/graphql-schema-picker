@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -9,11 +8,12 @@ import (
 
 const blob = `
 [[type]]
-name = "Person"
-deny_list = ["foobar"]
+name = "PersonInsertInput"
+deny_list = ["address"]
 
 [[type]]
-name = "Stairway to Heaven"
+name = "Person"
+deny_list = ["address"]
 `
 
 func TestDecode(t *testing.T) {
@@ -22,7 +22,18 @@ func TestDecode(t *testing.T) {
 	_, err := toml.Decode(blob, &testCfg)
 	require.NoError(t, err)
 
-	for _, s := range testCfg.Types {
-		fmt.Printf("%s (%v)\n", s.Name, s.DenyList)
+	expected := config{
+		Types: []Type{
+			{
+				Name:     "PersonInsertInput",
+				DenyList: []string{"address"},
+			},
+			{
+				Name:     "Person",
+				DenyList: []string{"address"},
+			},
+		},
 	}
+
+	require.Equal(t, expected, testCfg)
 }

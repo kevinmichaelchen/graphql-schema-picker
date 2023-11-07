@@ -29,6 +29,7 @@ func sanitizeComment(d Describer) string {
 
 func NewVertex(node ast.Node) Vertex {
 	var name string
+
 	switch node.GetKind() {
 	case kinds.ScalarDefinition:
 		obj := node.(*ast.ScalarDefinition)
@@ -125,7 +126,9 @@ func buildPrunedGraph(doc *ast.Document) graph.Graph[string, Vertex] {
 	// Build edges between vertices.
 	buildEdges(g)
 
-	// Prunes any vertices that don't appear in any edges
+	// Prune our graph:
+	// 1. We filter out any vertices (GQL types) that we don't explicitly want
+	// 2. We filter out any fields within those GQL types
 	return prune(g)
 }
 
@@ -154,6 +157,9 @@ func loadTopLevelDefinitions(g graph.Graph[string, Vertex], doc *ast.Document) {
 	}
 }
 
+// Prune our graph:
+// 1. We filter out any vertices (GQL types) that we don't explicitly want
+// 2. We filter out any fields within those GQL types
 func prune(in graph.Graph[string, Vertex]) graph.Graph[string, Vertex] {
 	m, err := in.AdjacencyMap()
 	if err != nil {
@@ -166,9 +172,13 @@ func prune(in graph.Graph[string, Vertex]) graph.Graph[string, Vertex] {
 			continue
 		}
 
+		// Retrieve the vertex (GraphQL type) by its name
 		def := must(in.Vertex(defName))
 
-		// Add vertex
+		// TODO clone the type definition and filter out fields
+		//  def = filter(clone(def))
+
+		// Add vertex (GraphQL type) to our new, outgoing graph
 		_ = out.AddVertex(def)
 
 		// Add its dependent vertices
@@ -190,6 +200,7 @@ func must(v Vertex, err error) Vertex {
 }
 
 func isDesired(definitionName string) bool {
+	// TODO deprecate in favor of config
 	for _, d := range desiredDefinitions {
 		if definitionName == d {
 			return true
@@ -200,6 +211,7 @@ func isDesired(definitionName string) bool {
 }
 
 func isBasicType(t string) bool {
+	// https://graphql.org/graphql-js/basic-types/
 	return t == "String" || t == "Float" || t == "Int" || t == "Boolean" || t == "ID"
 }
 
