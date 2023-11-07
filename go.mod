@@ -6,7 +6,7 @@ require (
 	github.com/charmbracelet/log v0.3.0
 	github.com/dominikbraun/graph v0.23.0
 	github.com/graphql-go/graphql v0.8.1
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 )
 
 require (
