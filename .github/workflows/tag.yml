@@ -1,0 +1,31 @@
+name: Create Git Tag on Main Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+        shell: bash
+
+      - name: Create Git Tag
+        uses: pkgxdev/setup@v1
+        run: |
+          export CURRENT_TAG=$(pkgx svu@latest current)
+          export NEXT_TAG=$(pkgx svu@latest next)
+          echo $CURRENT_TAG
+          echo $NEXT_TAG
+          if [[ "$CURRENT_TAG" != "$NEXT_TAG" || -z "$CURRENT_TAG" ]]; then
+            git tag $NEXT_TAG && git push origin refs/tags/"$NEXT_TAG"
+          fi
+        shell: bash
