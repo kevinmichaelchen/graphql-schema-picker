@@ -35,6 +35,6 @@ jobs:
           if [[ "$CURRENT_TAG" != "$NEXT_TAG" || -z "$CURRENT_TAG" ]]; then
             git tag $NEXT_TAG && git push origin refs/tags/"$NEXT_TAG"
           else
-            do echo "Skipping tag push :)"
+            echo "Skipping tag push :)"
           fi
         shell: bash
