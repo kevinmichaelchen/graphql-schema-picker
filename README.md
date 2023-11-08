@@ -29,9 +29,10 @@ our example [**SDL file**][sdl-file] (Schema Definition Language).
 
 ### Installing
 
-Eventually, I may package this up in Tea and maybe even Homebrew (via
+Eventually, I may package this up in [pkgx][pkgx] and maybe even Homebrew (via
 [Goreleaser][goreleaser-brew]).
 
+[pkgx]: https://pkgx.sh/
 [goreleaser-brew]: https://goreleaser.com/customization/homebrew/
 
 #### With `go install`
@@ -79,7 +80,10 @@ go run cmd/graphql-schema-picker/main.go \
 
 ### Releasing
 
-Create tags with `xc tag` and push them with `git push --tags`.
+Follow [Conventional Commits][conventional-commits] and SemVer releases should
+happen automatically via GitHub Actions. 
+
+[conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
 
 ## Tasks
 
@@ -88,14 +92,5 @@ Create tags with `xc tag` and push them with `git push --tags`.
 Builds the Go program into a local binary.
 
 ```shell
-goreleaser build --clean --single-target
-```
-
-### tag
-
-Create a new Git tag
-
-```shell
-sh <(curl https://tea.xyz) +github.com/caarlos0/svu \
-  git tag -a $(svu next) -m "$(svu next)"
+pkgx goreleaser build --clean --single-target
 ```
