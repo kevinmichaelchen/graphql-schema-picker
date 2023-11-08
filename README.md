@@ -73,9 +73,10 @@ docker run --rm \
 go run cmd/graphql-schema-picker/main.go \
   --debug \
   pick \
-    --output examples/pruned.sdl.graphqls \
+    --config examples/config.toml \
     --sdl-file examples/hasura.sdl.graphqls \
-    --definitions Aircrafts
+    --output examples/pruned.sdl.graphqls \
+    --definitions Aircrafts,AircraftsInsertInput
 ```
 
 ### Releasing

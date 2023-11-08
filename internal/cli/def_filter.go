@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/charmbracelet/log"
 	"github.com/graphql-go/graphql/language/ast"
 	"github.com/graphql-go/graphql/language/kinds"
 )
@@ -17,6 +18,7 @@ func filterDef(def Vertex) ast.Node {
 		objName := obj.Name.Value
 
 		newObjName := getNewObjectName(objName)
+		log.Info("newObjName", "newObjName", newObjName)
 
 		var fields []*ast.FieldDefinition
 		for _, field := range obj.Fields {
@@ -32,10 +34,10 @@ func filterDef(def Vertex) ast.Node {
 		out = &ast.ObjectDefinition{
 			Kind: obj.Kind,
 			// Location might not be accurate since we're pruning, so exclude it
-			//Loc: obj.Loc,
+			Loc: obj.Loc,
 			Name: &ast.Name{
-				Kind:  kinds.StringValue,
-				Loc:   nil,
+				Kind:  kinds.Name,
+				Loc:   obj.Name.Loc,
 				Value: newObjName,
 			},
 			Description: obj.Description,
@@ -46,6 +48,8 @@ func filterDef(def Vertex) ast.Node {
 			Directives: obj.Directives,
 			Fields:     fields,
 		}
+
+		log.Debug("Returning new ObjectDefinition", "name", newObjName)
 
 	case kinds.InputObjectDefinition:
 		obj := node.(*ast.InputObjectDefinition)
@@ -67,16 +71,18 @@ func filterDef(def Vertex) ast.Node {
 		out = &ast.InputObjectDefinition{
 			Kind: obj.Kind,
 			// Location might not be accurate since we're pruning, so exclude it
-			//Loc: obj.Loc,
+			Loc: obj.Loc,
 			Name: &ast.Name{
-				Kind:  kinds.StringValue,
-				Loc:   nil,
+				Kind:  kinds.Name,
+				Loc:   obj.Name.Loc,
 				Value: newObjName,
 			},
 			Description: obj.Description,
 			Directives:  obj.Directives,
 			Fields:      fields,
 		}
+
+		log.Debug("Returning new InputObjectDefinition", "name", newObjName)
 
 	default:
 		return node
@@ -86,7 +92,9 @@ func filterDef(def Vertex) ast.Node {
 }
 
 func getNewObjectName(objName string) string {
-	defCfg := cfg.toMap()[objName]
+	typeMap := cfg.toMap()
+	log.Info("looking for object name", "objName", objName, "typeMap", typeMap)
+	defCfg := typeMap[objName]
 	if defCfg.NewName != "" {
 		return defCfg.NewName
 	}

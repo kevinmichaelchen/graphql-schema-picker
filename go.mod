@@ -9,7 +9,6 @@ require (
 	github.com/graphql-go/graphql v0.8.1
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
-	github.com/spf13/cobra v1.8.0
 )
 
 require (

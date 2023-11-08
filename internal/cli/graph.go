@@ -91,6 +91,8 @@ func NewVertex(node ast.Node) Vertex {
 		panic("NewVertex: unsupported node kind: " + node.GetKind())
 	}
 
+	log.Debug("Creating vertex", "name", name)
+
 	return Vertex{
 		Name: name,
 		Node: node,
