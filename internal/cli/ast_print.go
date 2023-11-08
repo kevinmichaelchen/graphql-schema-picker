@@ -2,10 +2,11 @@ package cli
 
 import (
 	"bufio"
+	"os"
+
 	"github.com/charmbracelet/log"
 	"github.com/graphql-go/graphql/language/ast"
 	"github.com/graphql-go/graphql/language/printer"
-	"os"
 )
 
 func printSDL(doc *ast.Document) {

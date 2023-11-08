@@ -13,3 +13,13 @@ type Bar {
   name: String
   quantity: Int!
 }
+
+input FooInsertInput {
+  name: String
+  bar: BarInsertInput
+}
+
+input BarInsertInput {
+  name: String
+  quantity: Int!
+}

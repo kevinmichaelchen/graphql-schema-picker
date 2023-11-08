@@ -1,9 +1,10 @@
 package cli
 
 import (
+	"os"
+
 	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var rootCmd = &cobra.Command{
@@ -16,6 +17,11 @@ var rootCmd = &cobra.Command{
 		if debug {
 			log.SetLevel(log.DebugLevel)
 		}
+
+		err := loadConfig()
+		if err != nil {
+			log.Fatal("error occurred while loading config", "err", err)
+		}
 	},
 }
 
@@ -26,6 +32,7 @@ var (
 	dryRun             bool
 	desiredDefinitions []string
 	output             string
+	configPath         string
 )
 
 // LDFlags contain fields that get linked and compiled into the final binary
@@ -46,6 +53,7 @@ func init() {
 
 	pick.Flags().StringSliceVarP(&desiredDefinitions, "definitions", "d", []string{}, "definitions from the SDL you want to pick/keep")
 	pick.Flags().StringVarP(&output, "output", "o", "", "where the resulting schema/SDL file is written")
+	pick.Flags().StringVarP(&configPath, "config", "c", "", "path to config file")
 }
 
 func Main(ldf LDFlags) {

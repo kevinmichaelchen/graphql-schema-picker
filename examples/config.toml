@@ -1,0 +1,9 @@
+[[type]]
+name = "Aircrafts"
+new_name = "SvcAircrafts"
+deny_list = ["flightsAggregate"]
+
+[[type]]
+name = "AircraftsInsertInput"
+new_name = "SvcAircraftsInsertInput"
+deny_list = ["airline", "flights", "manufacturer"]
